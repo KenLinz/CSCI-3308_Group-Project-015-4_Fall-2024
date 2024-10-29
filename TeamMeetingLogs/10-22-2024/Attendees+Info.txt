@@ -1,0 +1,21 @@
+Attendees -
+Melanie
+Ken
+
+Info -
+The recording is missing audio, but to recap:
+
+- Ken will be absent for Lab 9
+	- Created Repository
+	- Creating Meetings
+	- Created READMEs to help with Lab 9
+
+- Login page framework is mostly created
+	- Open in docker, review and identify problems/things to fix
+
+- Begin thinking of things to add to application!
+	- Structure
+	- Features
+
+- Meeting info and attendees will be stored in their respective folders. Please be sure to attend meetings when possible, and if not please give notice.
+- This meeting recording is missing audio and we can look into better recording software next meeting so we can record audio.
