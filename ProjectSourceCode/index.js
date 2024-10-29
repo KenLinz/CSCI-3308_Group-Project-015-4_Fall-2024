@@ -70,6 +70,8 @@ app.use(
     })
 );
 
+app.use(express.static("./views/resources"));
+
 // *****************************************************
 // <!-- Section 4 : API Routes -->
 // *****************************************************
@@ -200,6 +202,13 @@ app.use(auth);
 // -------------------------------------  ROUTES for HOME(?).hbs   ----------------------------------------------
 app.get('/home', (req, res) => {
     res.render('pages/home', {
+        message: undefined,
+    });
+});
+
+// -------------------------------------  ROUTES for HOME(?).hbs   ----------------------------------------------
+app.get('/profile', (req, res) => {
+    res.render('pages/profile', {
         message: undefined,
     });
 });
