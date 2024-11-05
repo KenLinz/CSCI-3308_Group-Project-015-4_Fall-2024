@@ -206,11 +206,47 @@ app.get('/home', (req, res) => {
     });
 });
 
-// -------------------------------------  ROUTES for HOME(?).hbs   ----------------------------------------------
-app.get('/profile', (req, res) => {
-    res.render('pages/profile', {
-        message: undefined,
-    });
+// -------------------------------------  ROUTES for PROFILE.hbs   ----------------------------------------------
+app.get('/profile', async (req, res) => {
+    try {
+        console.log('Session:', req.session);
+        console.log('Session user:', req.session.user);
+
+        // Check if user is logged in
+        if (!req.session.user) {
+            console.log('No session user found - redirecting to login');
+            return res.redirect('/login');
+        }
+
+        // Fetch user data
+        const userQuery = 'SELECT * FROM users WHERE username = $1';
+        console.log('Executing user query:', userQuery);
+        const userData = await db.one(userQuery, [req.session.user.username]);
+        console.log('User data result:', userData);
+
+        // Fetch user stats
+        const statsQuery = 'SELECT stat_type, stat_value FROM user_stats WHERE username = $1';
+        console.log('Executing stats query:', statsQuery);
+        const statsData = await db.any(statsQuery, [req.session.user.username]);
+        console.log('Stats data result:', statsData);
+
+        // Format the data for the template
+        const user = {
+            username: req.session.user.username,
+            profileImage: userData.profile_image_path,
+            bio: userData.bio,
+            stats: statsData.map(stat => ({
+                label: stat.stat_type,
+                value: stat.stat_value
+            }))
+        };
+        console.log('Final user object being sent to template:', user);
+
+        res.render('pages/profile', { user });
+    } catch (error) {
+        console.error('Error in profile route:', error);
+        res.status(500).send('Server error');
+    }
 });
 
 // -------------------------------------  ROUTES for logout.hbs   ----------------------------------------------
