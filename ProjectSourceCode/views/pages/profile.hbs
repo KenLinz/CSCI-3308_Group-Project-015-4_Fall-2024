@@ -1,0 +1,78 @@
+<div class="container mx-auto p-6">
+    {{!-- Profile Header with Centered Username --}}
+    <div class="flex items-center justify-center mb-8 space-x-4">
+        {{#if user.profileImage}}
+            <img src="{{user.profileImage}}" alt="Profile Picture" style="width: 30px; height: 30px;" class="rounded-full">
+        {{else}}
+            <img src="img.png" alt="Default Profile Picture" style="width: 100px; height: 100px;" class="rounded-full">
+        {{/if}}
+        <h1 class="text-3xl font-bold text-gray-800">{{user.username}}</h1>
+    </div>    
+
+    {{!-- Stats Section --}}
+    <div class="mb-8">
+        <h2 class="text-2xl font-bold mb-4">Stats</h2>
+        {{#if user.stats}}
+            <div class="overflow-x-auto">
+                <table class="w-full">
+                    <thead class="border-b-2">
+                        <tr>
+                            <th class="text-left py-2">Stat</th>
+                            <th class="text-right py-2">Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#each user.stats}}
+                            <tr class="border-b">
+                                <td class="py-3">{{this.label}}</td>
+                                <td class="text-right py-3">{{this.value}}</td>
+                            </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+            </div>
+        {{else}}
+            <p class="text-gray-600 text-center">No stats available</p>
+        {{/if}}
+    </div>
+
+    {{!-- Friends Section --}}
+    <div class="mb-8">
+        <h2 class="text-2xl font-bold mb-4">Friends</h2>
+        {{#if user.friends}}
+            <div class="overflow-x-auto">
+                <table class="w-full">
+                    <tbody>
+                        {{#each user.friends}}
+                            <tr class="border-b">
+                                <td class="py-3">{{this.name}}</td>
+                                <td class="py-3 text-right">
+                                    <button class="bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700">
+                                        Invite to Match
+                                    </button>
+                                </td>
+                            </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+            </div>
+        {{else}}
+            <div class="flex justify-between items-center">
+                <p class="text-gray-600 text-center">No friends added yet</p>
+                <button class="bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700">
+                    Add Friends
+                </button>
+            </div>
+        {{/if}}
+    </div>
+
+    {{!-- Bio Section at Bottom --}}
+    <div class="mt-12">
+        <h2 class="text-2xl font-bold mb-4">Bio:</h2>
+        {{#if user.bio}}
+            <p class="text-gray-700">{{user.bio}}</p>
+        {{else}}
+            <p class="text-gray-600">No bio added yet</p>
+        {{/if}}
+    </div>
+</div>
