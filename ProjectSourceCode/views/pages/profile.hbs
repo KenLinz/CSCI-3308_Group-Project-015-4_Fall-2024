@@ -1,17 +1,22 @@
 <div class="container mx-auto p-6">
     {{!-- Profile Header with Centered Username --}}
     <div class="flex items-center justify-center mb-8 space-x-4">
+        <br/>
+        <br/>
+        <div class="container" style="text-align: center; color:black; border-radius:10px; border:3px solid black; border-style:rounded; background:orange; height: 105px; padding-bottom:10px; padding-top:10px;">
         {{#if user.profileImage}}
             <img src="{{user.profileImage}}" alt="Profile Picture" style="width: 30px; height: 30px;" class="rounded-full">
         {{else}}
-            <img src="img.png" alt="Default Profile Picture" style="width: 100px; height: 100px;" class="rounded-full">
+            <img src="defaultpfp.jpg" alt="Default Profile Picture" style="width: 75px; height: 75px; border:5px solid black; vertical-align:middle;" class="rounded-full">
         {{/if}}
-        <h1 class="text-3xl font-bold text-gray-800">{{user.username}}</h1>
+        <h1 class="text-3xl font-bold text-gray-800" style="display: inline; vertical-align:middle;">&nbsp; {{user.username}}</h1>
+        </div>
     </div>    
-
+    <br/>
+    <br/>
     {{!-- Stats Section --}}
-    <div class="mb-8">
-        <h2 class="text-2xl font-bold mb-4">Stats</h2>
+    <div class="mb-8" style="color:black; border-radius:10px; border:3px solid black; border-style:rounded; background:lightgray; padding-top:10px;">
+        <h2 class="text-2xl font-bold mb-4" style="text-align: center;">Stats</h2>
         {{#if user.stats}}
             <div class="overflow-x-auto">
                 <table class="w-full">
@@ -35,10 +40,11 @@
             <p class="text-gray-600 text-center">No stats available</p>
         {{/if}}
     </div>
-
+    <br/>
+    <br/>
     {{!-- Friends Section --}}
-    <div class="mb-8">
-        <h2 class="text-2xl font-bold mb-4">Friends</h2>
+    <div class="mb-8" style="color:black; border-radius:10px; border:3px solid black; border-style:rounded; background:lightgray; padding-top:10px; padding-bottom:10px;">
+        <h2 class="text-2xl font-bold mb-4" style="text-align: center;">Friends</h2>
         {{#if user.friends}}
             <div class="overflow-x-auto">
                 <table class="w-full">
@@ -59,20 +65,26 @@
         {{else}}
             <div class="flex justify-between items-center">
                 <p class="text-gray-600 text-center">No friends added yet</p>
-                <button class="bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700">
+                <div style="text-align: right; margin-right:15px;">
+                <button class="bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700" style="background: blue;">
                     Add Friends
                 </button>
+                </div>
             </div>
         {{/if}}
     </div>
-
+    <br/>
+    <br/>
     {{!-- Bio Section at Bottom --}}
-    <div class="mt-12">
-        <h2 class="text-2xl font-bold mb-4">Bio:</h2>
+    <div class="mt-12"  style="color:black; border-radius:10px; border:3px solid black; border-style:rounded; background:lightgray; padding-top:10px; padding-bottom:10px;">
+        <h2 class="text-2xl font-bold mb-4" style="text-align: center;">Bio:</h2>
         {{#if user.bio}}
             <p class="text-gray-700">{{user.bio}}</p>
         {{else}}
-            <p class="text-gray-600">No bio added yet</p>
+            <p class="text-gray-600" style="margin-left:10px; margin-right:10px;">No bio added yet</p>
         {{/if}}
     </div>
+    <br/>
+    <br/>
+    <br/>
 </div>
