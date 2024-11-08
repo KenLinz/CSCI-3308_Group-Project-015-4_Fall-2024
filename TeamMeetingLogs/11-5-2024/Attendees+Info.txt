@@ -1,0 +1,16 @@
+Attendees -
+Melanie
+Ken
+Oscar
+Emmett
+
+Info -
+- Login page framework is mostly created
+	- Open in docker, review and identify problems/things to fix
+
+- Base Strucure for Single Player:
+    - Emmett, Olivia, Melanie
+
+- Profile Page Structure/Function:
+    - Ken, Oscar
+

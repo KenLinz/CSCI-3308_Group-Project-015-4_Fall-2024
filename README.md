@@ -1,12 +1,14 @@
 # CSCI 3308 - Rec Section 015 - Group 4 - Application Name
 
-This is an outline for a readme that can be created at a later date.
-
-Outline Includes:
+This is a social, casually competetive version of wordle.
 
 ## Application Description
 
+The application is basically wordle with expanded social elements (friends lists and leaderboards) as well as a head to head competetive version of the classic game.
+
 ## Vision Statement
+
+we wanted to create a replayable, fun word game where you could compete against your friends and see how you rank on a global level.
 
 ## Outline
 

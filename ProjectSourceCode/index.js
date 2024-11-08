@@ -99,6 +99,10 @@ app.get('/all', (req, res) => {
         });
 });
 
+app.get('/welcome', (req, res) => {
+    res.json({status: 'success', message: 'Welcome!'});
+  });
+
 // -------------------------------------  ROUTES for register.hbs   ----------------------------------------------
 const user = {
     username: undefined,
@@ -126,12 +130,19 @@ app.post('/register', async (req, res) => {
         hash
     ])
         .then(data => {
+            // TEST CASE
+            // res.status('200').json({message: 'Successfully created account!'});
+
             res.render('pages/login', {
                 message: "Successfully created account!",
             });
         })
         .catch(err => {
             console.log(err);
+
+            // TEST CASE
+            // res.json({message: 'Something went wrong. Either your username was invalid or is already taken!'});
+
             res.render('pages/register', {
                 error: true,
                 message: "Something went wrong. Either your username was invalid or is already taken!",
@@ -206,11 +217,47 @@ app.get('/home', (req, res) => {
     });
 });
 
-// -------------------------------------  ROUTES for HOME(?).hbs   ----------------------------------------------
-app.get('/profile', (req, res) => {
-    res.render('pages/profile', {
-        message: undefined,
-    });
+// -------------------------------------  ROUTES for PROFILE.hbs   ----------------------------------------------
+app.get('/profile', async (req, res) => {
+    try {
+        console.log('Session:', req.session);
+        console.log('Session user:', req.session.user);
+
+        // Check if user is logged in
+        if (!req.session.user) {
+            console.log('No session user found - redirecting to login');
+            return res.redirect('/login');
+        }
+
+        // Fetch user data
+        const userQuery = 'SELECT * FROM users WHERE username = $1';
+        console.log('Executing user query:', userQuery);
+        const userData = await db.one(userQuery, [req.session.user.username]);
+        console.log('User data result:', userData);
+
+        // Fetch user stats
+        const statsQuery = 'SELECT stat_type, stat_value FROM user_stats WHERE username = $1';
+        console.log('Executing stats query:', statsQuery);
+        const statsData = await db.any(statsQuery, [req.session.user.username]);
+        console.log('Stats data result:', statsData);
+
+        // Format the data for the template
+        const user = {
+            username: req.session.user.username,
+            profileImage: userData.profile_image_path,
+            bio: userData.bio,
+            stats: statsData.map(stat => ({
+                label: stat.stat_type,
+                value: stat.stat_value
+            }))
+        };
+        console.log('Final user object being sent to template:', user);
+
+        res.render('pages/profile', { user });
+    } catch (error) {
+        console.error('Error in profile route:', error);
+        res.status(500).send('Server error');
+    }
 });
 
 // -------------------------------------  ROUTES for logout.hbs   ----------------------------------------------
@@ -235,5 +282,5 @@ app.get('/play_singleplayer', (req, res) => {
 // <!-- Section 5 : Start Server-->
 // *****************************************************
 // starting the server and keeping the connection open to listen for more requests
-app.listen(3000);
+module.exports = app.listen(3000);
 console.log('Server is listening on port 3000');
