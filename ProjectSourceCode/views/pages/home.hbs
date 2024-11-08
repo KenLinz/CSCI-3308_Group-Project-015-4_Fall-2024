@@ -9,17 +9,16 @@
 
     <h2 style="font-family:impact; text-align:center; margin-top: 10px; color:black;"> Leaderboard </h2>
 
-    <div style="background-color:black">
-        <h1 style="font-family:impact; text-align:center; margin-top: 10px; color:white;"> partial for leaderboard will go here! </h1>
+        {{> leaderboard}}
     </div>
 
 
-    <div  style="font-family:impact; margin-left:10px;text-align:center">
-            <a style="display:inline-block;color:black; border-radius:10px; border:3px solid black; border-style:rounded; background:gray;" class="link" href="/play_singleplayer">_Play Singleplayer!_ </a>
+        <div  style="font-family:impact; margin-left:10px;text-align:center">
             
-            <button  style="font-family:impact;display:inline-block;color:black; border-radius:10px; border:3px solid black; border-style:rounded; background:gray;" href="/login">Play head to head</button>
-            {{!-- not sure if we want 2 or 1 buttons so I have 2 just in case lol --}}
-    </div>
+                <button  style="display:inline-block;color:black; border-radius:10px; border:3px solid black; border-style:rounded; background:gray;" href="/home">PLAY</button>
+                <button  style="display:inline-block;color:black; border-radius:10px; border:3px solid black; border-style:rounded; background:gray;" href="/profile">Play head to head</button>
+                {{!-- not sure if we want 2 or 1 buttons so I have 2 just in case lol --}}
+        </div>
 
 
 </div>
