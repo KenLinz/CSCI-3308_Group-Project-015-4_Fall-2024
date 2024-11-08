@@ -131,12 +131,16 @@ app.post('/register', async (req, res) => {
     ])
         .then(data => {
             res.render('pages/login', {
+                // TEST CASE
+                // res.status('200').json({message: 'Successfully created account!'});
                 message: "Successfully created account!",
             });
         })
         .catch(err => {
             console.log(err);
             res.render('pages/register', {
+                // TEST CASE
+                // res.status('200').json({message: 'Successfully created account!'});
                 error: true,
                 message: "Something went wrong. Either your username was invalid or is already taken!",
             });
@@ -258,6 +262,13 @@ app.get('/logout', (req, res) => {
     req.session.destroy();
     res.render('pages/logout', {
         message: "Successfully Logged Out!"
+    });
+});
+
+// -------------------------------------  ROUTES for play_singleplayer.hbs   ----------------------------------------------
+app.get('/play_singleplayer', (req, res) => {
+    res.render('pages/play_singleplayer', {
+        message: undefined,
     });
 });
 

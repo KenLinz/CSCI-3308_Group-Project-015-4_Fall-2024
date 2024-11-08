@@ -28,5 +28,28 @@ describe('Server!', () => {
 });
 
 // *********************** TODO: WRITE 2 UNIT TESTCASES **************************
+describe('Testing Creation of User', () => {
+  it('positive : /register    BASIC ACCOUNT CREATION', done => {
+    chai
+      .request(server)
+      .post('/register')
+      .send({ username: 'username123', password: 'password123' })
+      .end((err, res) => {
+        expect(res).to.have.status(200);
+        expect(res.body.message).to.equals('Successfully created account!');
+        done();
+      });
+  });
 
+  it('Negative : /register     USERNAME TOO LONG', done => {
+    chai
+      .request(server)
+      .post('/register')
+      .send({ username: 'username123username123username123username123username123username123username123username123username123username123username123username123username123username123username123', password: 'password123' })
+      .end((err, res) => {
+        expect(res.body.message).to.equals('Something went wrong. Either your username was invalid or is already taken!');
+        done();
+      });
+  });
+});
 // ********************************************************************************
