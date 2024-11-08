@@ -1,5 +1,8 @@
 <head>
     <link rel="stylesheet" href="stylesheet.css">
+    {{!-- do all code for the gameplay in this file! --}}
+    <script type="text/javascript" src="wordle.js"></script>
+    {{!-- {{ includeScript '/../resources/wordle.js' }} --}}
 </head>
 
 <body> 
@@ -135,6 +138,21 @@
                 <button type="submit" class="btn btn-primary" style="border:3px solid black;background-color:gray;border-radius:10px;display:inline-block;">Guess!</button>
             </form>  
 
+        </div>
+
+
+        <div> 
+
+            <p> Generated 6 letter word: </p>
+            <p id="current_word"> A</p>
+            <div>
+                
+            </div>
+
+            
+            <button id="make_new_word" onclick="generateWord();" type="submit" class="btn btn-primary" style="border:3px solid black;background-color:gray;border-radius:10px;display:inline-block;">
+                Generate new word (this is to test making random words)
+            </button>
         </div>
 
 
