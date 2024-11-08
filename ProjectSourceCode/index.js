@@ -268,6 +268,16 @@ app.get('/logout', (req, res) => {
     });
 });
 
+
+// -------------------------------------  ROUTES for play_singleplayer.hbs   ----------------------------------------------
+app.get('/play_singleplayer', (req, res) => {
+    res.render('pages/play_singleplayer', {
+        message: undefined,
+    });
+});
+
+
+
 // *****************************************************
 // <!-- Section 5 : Start Server-->
 // *****************************************************
