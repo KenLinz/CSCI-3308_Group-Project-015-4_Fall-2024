@@ -130,12 +130,19 @@ app.post('/register', async (req, res) => {
         hash
     ])
         .then(data => {
+            // TEST CASE
+            // res.status('200').json({message: 'Successfully created account!'});
+
             res.render('pages/login', {
                 message: "Successfully created account!",
             });
         })
         .catch(err => {
             console.log(err);
+
+            // TEST CASE
+            // res.json({message: 'Something went wrong. Either your username was invalid or is already taken!'});
+
             res.render('pages/register', {
                 error: true,
                 message: "Something went wrong. Either your username was invalid or is already taken!",
