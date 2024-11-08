@@ -7,7 +7,7 @@ services:
       - '5432'
     volumes:
       - group-project:/var/lib/postgresql/data
-      - ./src/init_data:/docker-entrypoint-initdb.d
+      - ./init_data:/docker-entrypoint-initdb.d
   web:
     image: node:lts
     user: 'node'
@@ -21,7 +21,7 @@ services:
       - '3000:3000'
     volumes:
       - ./:/repository
-    command: 'npm start'
+    command: 'npm run testandrun'
     #command: 'npm run testandrun' ###FOR MOCHA
 volumes:
   group-project:
