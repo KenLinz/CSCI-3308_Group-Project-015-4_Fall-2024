@@ -3,10 +3,21 @@ const many_words = ["aboard", "abroad", "absent", "absorb", "absurd", "accent", 
 
 function generateWordTest(){
     const element = document.getElementById('current_word');
-    element.textContent = many_words[Math.floor(Math.random() * 1000) - 1]; 
+    const wrd = many_words[Math.floor(Math.random() * 1000) - 1].toLowerCase();
+    if(wrd == ""){
+        wrd = "ERROR UH OHHH!!!!!S"
+    }
+    element.textContent = wrd; 
     return;
 }
 
 function generateWord(){
+
+    const wrd = many_words[Math.floor(Math.random() * 1000) - 1].toLowerCase();
+    if(wrd == ""){
+        wrd = "ERROR UH OHHH!!!!!S"
+    }
+
+
     return many_words[Math.floor(Math.random() * 1000) - 1]; 
 }
