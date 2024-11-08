@@ -99,6 +99,10 @@ app.get('/all', (req, res) => {
         });
 });
 
+app.get('/welcome', (req, res) => {
+    res.json({status: 'success', message: 'Welcome!'});
+  });
+
 // -------------------------------------  ROUTES for register.hbs   ----------------------------------------------
 const user = {
     username: undefined,
@@ -126,12 +130,19 @@ app.post('/register', async (req, res) => {
         hash
     ])
         .then(data => {
+            // TEST CASE
+            // res.status('200').json({message: 'Successfully created account!'});
+
             res.render('pages/login', {
                 message: "Successfully created account!",
             });
         })
         .catch(err => {
             console.log(err);
+
+            // TEST CASE
+            // res.json({message: 'Something went wrong. Either your username was invalid or is already taken!'});
+
             res.render('pages/register', {
                 error: true,
                 message: "Something went wrong. Either your username was invalid or is already taken!",
@@ -261,5 +272,5 @@ app.get('/logout', (req, res) => {
 // <!-- Section 5 : Start Server-->
 // *****************************************************
 // starting the server and keeping the connection open to listen for more requests
-app.listen(3000);
+module.exports = app.listen(3000);
 console.log('Server is listening on port 3000');
