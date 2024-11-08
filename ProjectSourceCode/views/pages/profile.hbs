@@ -1,78 +1,159 @@
 <div class="container mx-auto p-6">
     {{!-- Profile Header with Centered Username --}}
     <div class="flex items-center justify-center mb-8 space-x-4">
-        {{#if user.profileImage}}
-            <img src="{{user.profileImage}}" alt="Profile Picture" style="width: 30px; height: 30px;" class="rounded-full">
-        {{else}}
-            <img src="img.png" alt="Default Profile Picture" style="width: 100px; height: 100px;" class="rounded-full">
-        {{/if}}
-        <h1 class="text-3xl font-bold text-gray-800">{{user.username}}</h1>
-    </div>    
-
+        <br />
+        <br />
+        <div class="container"
+            style="text-align: center; color:black; border-radius:10px; border:3px solid black; border-style:rounded; background:orange; height: 105px; padding-bottom:10px; padding-top:10px;">
+            {{#if user.profileImage}}
+            <img src="{{user.profileImage}}" alt="Profile Picture" style="width: 30px; height: 30px;"
+                class="rounded-full">
+            {{else}}
+            <img src="defaultpfp.jpg" alt="Default Profile Picture"
+                style="width: 75px; height: 75px; border:5px solid black; vertical-align:middle;" class="rounded-full">
+            {{/if}}
+            <h1 class="text-3xl font-bold text-gray-800" style="display: inline; vertical-align:middle;">&nbsp;
+                {{user.username}}</h1>
+        </div>
+    </div>
+    <br />
+    <br />
     {{!-- Stats Section --}}
-    <div class="mb-8">
-        <h2 class="text-2xl font-bold mb-4">Stats</h2>
+    <div class="mb-8"
+        style="color:black; border-radius:10px; border:3px solid black; border-style:rounded; background:lightgray; padding-top:10px;">
+        <h2 class="text-2xl font-bold mb-4" style="text-align: center;">Stats</h2>
         {{#if user.stats}}
-            <div class="overflow-x-auto">
-                <table class="w-full">
-                    <thead class="border-b-2">
-                        <tr>
-                            <th class="text-left py-2">Stat</th>
-                            <th class="text-right py-2">Value</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {{#each user.stats}}
-                            <tr class="border-b">
-                                <td class="py-3">{{this.label}}</td>
-                                <td class="text-right py-3">{{this.value}}</td>
-                            </tr>
-                        {{/each}}
-                    </tbody>
-                </table>
-            </div>
+        <div class="overflow-x-auto">
+            <table class="w-full">
+                <thead class="border-b-2">
+                    <tr>
+                        <th class="text-left py-2">Stat</th>
+                        <th class="text-right py-2">Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each user.stats}}
+                    <tr class="border-b">
+                        <td class="py-3">{{this.label}}</td>
+                        <td class="text-right py-3">{{this.value}}</td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
         {{else}}
-            <p class="text-gray-600 text-center">No stats available</p>
+        <p class="text-gray-600 text-center">No stats available</p>
         {{/if}}
     </div>
-
+    <br />
+    <br />
     {{!-- Friends Section --}}
-    <div class="mb-8">
-        <h2 class="text-2xl font-bold mb-4">Friends</h2>
+    <div class="mb-8"
+        style="color:black; border-radius:10px; border:3px solid black; border-style:rounded; background:lightgray; padding-top:10px; padding-bottom:10px;">
+        <h2 class="text-2xl font-bold mb-4" style="text-align: center;">Friends</h2>
         {{#if user.friends}}
-            <div class="overflow-x-auto">
-                <table class="w-full">
-                    <tbody>
-                        {{#each user.friends}}
-                            <tr class="border-b">
-                                <td class="py-3">{{this.name}}</td>
-                                <td class="py-3 text-right">
-                                    <button class="bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700">
-                                        Invite to Match
-                                    </button>
-                                </td>
-                            </tr>
-                        {{/each}}
-                    </tbody>
-                </table>
-            </div>
+        <div class="overflow-x-auto">
+            <table class="w-full">
+                <tbody>
+                    {{#each user.friends}}
+                    <tr class="border-b">
+                        <td class="py-3">{{this.name}}</td>
+                        <td class="py-3 text-right">
+                            <button class="bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700">
+                                Invite to Match
+                            </button>
+                        </td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
         {{else}}
-            <div class="flex justify-between items-center">
-                <p class="text-gray-600 text-center">No friends added yet</p>
-                <button class="bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700">
+        <div class="flex justify-between items-center">
+            <p class="text-gray-600 text-center">No friends added yet</p>
+            <div style="text-align: right; margin-right:15px;">
+                <button class="bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700"
+                    style="background: blue;">
                     Add Friends
                 </button>
             </div>
+        </div>
         {{/if}}
     </div>
-
+    <br />
+    <br />
     {{!-- Bio Section at Bottom --}}
-    <div class="mt-12">
-        <h2 class="text-2xl font-bold mb-4">Bio:</h2>
+    <div class="mt-12"
+        style="color:black; border-radius:10px; border:3px solid black; border-style:rounded; background:lightgray; padding-top:10px; padding-bottom:10px;">
+        <h2 class="text-2xl font-bold mb-4" style="text-align: center;">Bio:</h2>
         {{#if user.bio}}
-            <p class="text-gray-700">{{user.bio}}</p>
+        <p class="text-gray-700">{{user.bio}}</p>
+        <div style="text-align: right; margin-right:15px;">
+            <button class="bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700"
+                style="background: blue;">
+                Change Bio
+            </button>
+        </div>
         {{else}}
-            <p class="text-gray-600">No bio added yet</p>
+        <p class="text-gray-600" style="margin-left:10px; margin-right:10px;">No bio added yet</p>
+        <div style="text-align: right; margin-right:15px;">
+            <button class="bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700" style="background: blue;"
+                onclick="openForm()" id="BioButton">
+                Add Bio
+            </button>
+
+            <!-- The Modal -->
+            <div id="myModal" class="modal" style="padding-left:50px; padding-right:50px; padding-top: 50px;">
+
+                <!-- Modal content -->
+                <div class="modal-content">
+                    <button class="close" onclick="closeForm()"
+                        class="bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700"
+                        style="background: red; text-align: right; margin-right:15px; margin-left:auto;">&times;</button>
+                    <h1 style="text-align: center;"><b>Bio</b></h1>
+                    <form action="/profile" method="POST">
+                    <div class="form-group">
+                        <input type="text" name="bio" id="bio" class="form-control" style="" required>
+                    </div>
+                    <br/>
+                    <button type="submit" class="btn btn-primary" style="text-align: center; margin-bottom:10px; margin-right:10px;">Add Bio</button>
+                </form>
+                </div>
+
+            </div>
+
+            <script>
+                // Get the modal
+                var modal = document.getElementById("myModal");
+
+                // Get the button that opens the modal
+                var btn = document.getElementById("BioButton");
+
+                // Get the <span> element that closes the modal
+                var span = document.getElementsByClassName("close")[0];
+
+                // When the user clicks the button, open the modal 
+                btn.onclick = function () {
+                    modal.style.display = "block";
+                }
+
+                // When the user clicks on <span> (x), close the modal
+                span.onclick = function () {
+                    modal.style.display = "none";
+                }
+
+                // When the user clicks anywhere outside of the modal, close it
+                window.onclick = function (event) {
+                    if (event.target == modal) {
+                        modal.style.display = "none";
+                    }
+                }
+            </script>
+
+        </div>
         {{/if}}
     </div>
+    <br />
+    <br />
+    <br />
 </div>
