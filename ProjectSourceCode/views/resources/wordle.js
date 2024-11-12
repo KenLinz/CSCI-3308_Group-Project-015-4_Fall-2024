@@ -1004,24 +1004,49 @@ const many_words = [
 ];
 
 let guesses = [];
-let word = generateWord();
+let word = undefined;
 
-function generateWordTest() {
-  const element = document.getElementById("current_word");
-  const wrd = many_words[Math.floor(Math.random() * 1000) - 1].toLowerCase();
-  if (wrd == "") {
-    wrd = "ERROR UH OHHH!!!!!S";
-  }
-  element.textContent = wrd;
-  return;
-}
+async function generateWord() {
+    temp = "";
+    //get random 6 letter words until dictionary recognizes it as a real word
+    while(true){
+        let testWord = await fetch('https://random-word-api.herokuapp.com/word?length=6')
+        .then(response => response.json())
+        .then(function (data) {
+            const testWord = data[0];
+            return data[0];
+        });
+        dictionaryUrl = "https://api.dictionaryapi.dev/api/v2/entries/en/" + testWord;
+        let isValid = await fetch(dictionaryUrl) 
+        .then(response => {
+            if (!response.ok) {
+                document.getElementById("message").textContent="Please enter a valid word!";
+                throw new Error('Network response was not ok');
+                return false;
+            }
+        })
+        .then(data => {
+            wordExists = true;
+            document.getElementById("message").textContent="";
+            console.log(wordExists);
+            return true;
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            return false;
+        });
+    
+        // console.log("picked word " + testWord);
+        // console.log("is valid? " + isValid);
+        
+        await new Promise((resolve, reject) => setTimeout(resolve, 10));
+        word = testWord;
+        if (isValid == true){
+            break;
+        }
+    }
 
-function generateWord() {
-  const wrd = many_words[Math.floor(Math.random() * 1000) - 1].toLowerCase();
-  if (wrd == "") {
-    wrd = "ERROR UH OHHH!!!!!S";
-  }
-  return many_words[Math.floor(Math.random() * 1000) - 1];
+    console.log("WORD IS: " + word);
 }
 
 function drawGuess(index, char, color) {
@@ -1060,6 +1085,7 @@ function check() {
             return false;
         }
         console.log(guess);
+        
         const g = guess.split("");
         const w = word.split("");
         let i = 0;
@@ -1104,4 +1130,16 @@ function check() {
     return;
 }
 
-console.log(word);
+// async function generateWord() {
+//     //https://random-word-api.herokuapp.com/word?length=6
+    
+//         // const testword = await fetch("https://random-word-api.herokuapp.com/word?length=6");
+//         // const test = await testword.json();
+//         // console.log(typeof test[0]);
+//         // return test;
+//         return "hellos";
+// }
+
+generateWord();
+//console.log("WORD IS: " + word);
+
