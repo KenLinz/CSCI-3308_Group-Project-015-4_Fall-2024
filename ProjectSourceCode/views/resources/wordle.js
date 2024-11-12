@@ -1,3 +1,5 @@
+// const { urlencoded } = require("body-parser");
+
 const many_words = [
   "aboard",
   "abroad",
@@ -1036,35 +1038,70 @@ function drawGuess(index, char, color) {
   box.style.backgroundColor = color;
 }
 
+
 function check() {
-  let guess = document.getElementById("guess").value;
-  console.log(guess);
-  const g = guess.split("");
-  const w = word.split("");
-  let i = 0;
-  for (let i = 0; i <= 5; i++) {
-    if (g[i] == w[i]) {
-      //make green
-      drawGuess(i + 1, g[i], "green");
-    } else {
-      let n = 0;
-      let c = 0;
-      while (n <= 5) {
-        if (g[i] == w[n]) {
-          c++;
-        }
-        n++;
-      }
-      if (c == 0) {
-        //make red
-        drawGuess(i + 1, g[i], "red");
-      } else {
-        //make yellow
-        drawGuess(i + 1, g[i], "yellow");
-      }
+    let guess = document.getElementById("guess").value;
+
+    //check if word is 6 letters
+    if(guess.length != 6){
+        document.getElementById("message").textContent="Please enter a 6 letter word!";
+        return false;
     }
-  }
-  guesses.push(guess);
-  console.log(guesses);
+
+    //API call to check if word exists in dictionary
+    wordExists = false;
+    dictionaryUrl = "https://api.dictionaryapi.dev/api/v2/entries/en/" + guess;
+    fetch(dictionaryUrl) 
+    .then(response => {
+        if (!response.ok) {
+            document.getElementById("message").textContent="Please enter a valid word!";
+            throw new Error('Network response was not ok');
+            
+            return false;
+        }
+        console.log(guess);
+        const g = guess.split("");
+        const w = word.split("");
+        let i = 0;
+        for (let i = 0; i <= 5; i++) {
+        if (g[i] == w[i]) {
+            //make green
+            drawGuess(i + 1, g[i], "green");
+        } else {
+            let n = 0;
+            let c = 0;
+            while (n <= 5) {
+            if (g[i] == w[n]) {
+                c++;
+            }
+            n++;
+            }
+            if (c == 0) {
+            //make red
+            drawGuess(i + 1, g[i], "red");
+            } else {
+            //make yellow
+            drawGuess(i + 1, g[i], "yellow");
+            }
+        }
+        }
+        guesses.push(guess);
+        console.log(guesses);
+        return true;
+    })
+    .then(data => {
+        wordExists = true;
+        document.getElementById("message").textContent="";
+        console.log(wordExists);
+        return true;
+        
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        return false;
+    });
+
+    return;
 }
+
 console.log(word);
