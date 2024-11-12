@@ -1020,7 +1020,7 @@ async function generateWord() {
         let isValid = await fetch(dictionaryUrl) 
         .then(response => {
             if (!response.ok) {
-                document.getElementById("message").textContent="Please enter a valid word!";
+                document.getElementById("message").textContent="looking for valid word, delete this message later";
                 throw new Error('Network response was not ok');
                 return false;
             }
@@ -1039,7 +1039,7 @@ async function generateWord() {
         // console.log("picked word " + testWord);
         // console.log("is valid? " + isValid);
         
-        await new Promise((resolve, reject) => setTimeout(resolve, 10));
+        await new Promise((resolve, reject) => setTimeout(resolve, 100));
         word = testWord;
         if (isValid == true){
             break;
@@ -1064,35 +1064,44 @@ function drawGuess(index, char, color) {
 }
 
 
-function check() {
+async function check() {
     let guess = document.getElementById("guess").value;
 
     //check if word is 6 letters
     if(guess.length != 6){
         document.getElementById("message").textContent="Please enter a 6 letter word!";
-        return false;
+        return;
     }
 
     //API call to check if word exists in dictionary
+    //returns the number of matching letters
     wordExists = false;
     dictionaryUrl = "https://api.dictionaryapi.dev/api/v2/entries/en/" + guess;
-    fetch(dictionaryUrl) 
+    matchCount = await fetch(dictionaryUrl) 
     .then(response => {
         if (!response.ok) {
             document.getElementById("message").textContent="Please enter a valid word!";
             throw new Error('Network response was not ok');
             
-            return false;
+            return 0;
         }
+    })
+    .then(data => {
+        wordExists = true;
+        document.getElementById("message").textContent="";
+        console.log(wordExists);
+
         console.log(guess);
         
         const g = guess.split("");
         const w = word.split("");
+        let mtchCnt = 0;
         let i = 0;
         for (let i = 0; i <= 5; i++) {
         if (g[i] == w[i]) {
             //make green
             drawGuess(i + 1, g[i], "green");
+            mtchCnt ++;
         } else {
             let n = 0;
             let c = 0;
@@ -1113,33 +1122,27 @@ function check() {
         }
         guesses.push(guess);
         console.log(guesses);
-        return true;
-    })
-    .then(data => {
-        wordExists = true;
-        document.getElementById("message").textContent="";
-        console.log(wordExists);
-        return true;
-        
+
+        return mtchCnt;
     })
     .catch(error => {
         console.error('Error:', error);
-        return false;
+        return 0;
     });
+
+    await new Promise((resolve, reject) => setTimeout(resolve, 10));
+    console.log(matchCount);
+
+    //add more stuff to win and loss states eventually!
+    if(matchCount == 6){
+        document.getElementById("message").textContent="Game won!";
+    }
+    else if(guesses.length == 5){
+        document.getElementById("message").textContent="Game loss!";
+    }
 
     return;
 }
 
-// async function generateWord() {
-//     //https://random-word-api.herokuapp.com/word?length=6
-    
-//         // const testword = await fetch("https://random-word-api.herokuapp.com/word?length=6");
-//         // const test = await testword.json();
-//         // console.log(typeof test[0]);
-//         // return test;
-//         return "hellos";
-// }
-
 generateWord();
-//console.log("WORD IS: " + word);
 
