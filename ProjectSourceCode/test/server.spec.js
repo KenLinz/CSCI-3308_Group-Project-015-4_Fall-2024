@@ -27,9 +27,9 @@ describe('Server!', () => {
   });
 });
 
-// *********************** TODO: WRITE 2 UNIT TESTCASES **************************
+// *********************** REGISTER TEST CASES **************************
 describe('Testing Creation of User', () => {
-  it('positive : /register    BASIC ACCOUNT CREATION', done => {
+  it('Positive : /register    BASIC ACCOUNT CREATION', done => {
     chai
       .request(server)
       .post('/register')
@@ -47,9 +47,40 @@ describe('Testing Creation of User', () => {
       .post('/register')
       .send({ username: 'username123username123username123username123username123username123username123username123username123username123username123username123username123username123username123', password: 'password123' })
       .end((err, res) => {
+        expect(res).to.have.status(400);
         expect(res.body.message).to.equals('Something went wrong. Either your username was invalid or is already taken!');
         done();
       });
   });
 });
-// ********************************************************************************
+// ***********************************************************************
+
+
+
+// *********************** LOGIN TEST CASES **************************
+describe('Testing Creation of User', () => {
+  it('Negative : /register     INVALID LOGIN', done => {
+    chai
+      .request(server)
+      .post('/login')
+      .send({ username: 'username123123', password: 'password123' })
+      .end((err, res) => {
+        expect(res).to.have.status(400);
+        expect(res.body.message).to.equals('Incorrect login information, maybe try registering.');
+        done();
+      });
+  });
+
+  it('Positive : /login    BASIC LOGIN', done => {
+    chai
+      .request(server)
+      .post('/login')
+      .send({ username: 'username123', password: 'password123' })
+      .end((err, res) => {
+        expect(res).to.have.status(200);
+        expect(res.body.message).to.equals('Successfully logged in!');
+        done();
+      });
+  });
+});
+// ********************************************************************

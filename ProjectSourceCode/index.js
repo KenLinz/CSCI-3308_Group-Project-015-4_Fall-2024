@@ -130,20 +130,26 @@ app.post('/register', async (req, res) => {
         hash
     ])
         .then(data => {
+            // TEST CASE
+            res.status('200').json({message: 'Successfully created account!'});
+            
+            /*
             res.render('pages/login', {
-                // TEST CASE
-                // res.status('200').json({message: 'Successfully created account!'});
                 message: "Successfully created account!",
             });
+            */
         })
         .catch(err => {
             console.log(err);
+            // TEST CASE
+            res.status('400').json({message: 'Something went wrong. Either your username was invalid or is already taken!'});
+
+            /*
             res.render('pages/register', {
-                // TEST CASE
-                // res.status('200').json({message: 'Successfully created account!'});
                 error: true,
                 message: "Something went wrong. Either your username was invalid or is already taken!",
             });
+            */
         });
 });
 
@@ -169,6 +175,11 @@ app.post('/login', (req, res) => {
 
     db.one(query, values)
         .then(async data => {
+            
+            // TEST CASE
+            // res.status('200').json({message: 'Successfully logged in!'});
+
+            // /*
             user.username = data.username;
             user.password = data.password;
             const match = await bcrypt.compare(req.body.password, user.password);
@@ -185,13 +196,19 @@ app.post('/login', (req, res) => {
                     message: "Incorrect password.",
                 });
             }
+            // */
         })
         .catch(err => {
             console.log(err);
+            // TEST CASE
+            res.status('400').json({message: 'Incorrect login information, maybe try registering.'});
+
+            // /*
             res.render('pages/register', {
                 error: true,
-                message: "No username found, maybe try registering.",
+                message: "Incorrect login information, maybe try registering.",
             });
+            // */
         });
 });
 
