@@ -12,7 +12,7 @@ CREATE TABLE users (
     password CHAR(60) NOT NULL,
     profile_image_path VARCHAR(255),
     bio TEXT,
-    games_played INTEGER NOT NULL,
+    games_played INTEGER,
     wins INTEGER NOT NULL,
     losses INTEGER NOT NULL,
     total_guesses INTEGER NOT NULL

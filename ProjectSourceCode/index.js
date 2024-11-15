@@ -260,10 +260,10 @@ app.get('/profile', async (req, res) => {
             username: req.session.user.username,
             profileImage: userData.profile_image_path,
             bio: userData.bio,
-            stats: statsData.map(stat => ({
-                label: stat.stat_type,
-                value: stat.stat_value
-            }))
+            games_played: userData.games_played,
+            total_guesses: userData.total_guesses,
+            wins: userData.wins,
+            losses: userData.losses
         };
         console.log('Final user object being sent to template:', user);
 
