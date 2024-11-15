@@ -267,13 +267,90 @@ app.get('/profile', async (req, res) => {
         };
         console.log('Final user object being sent to template:', user);
 
-        res.render('pages/profile', { user });
+        const message = req.session.message;
+        const error = req.session.error;
+        req.session.message = req.session.error = null;
+
+        res.render('pages/profile', { user, message, error });
+       
     } catch (error) {
         console.error('Error in profile route:', error);
         res.status(500).send('Server error');
     }
 });
 
+app.post('/profile/bio', async (req, res) => {
+    try {
+        // Check if user is logged in
+        if (!req.session.user) {
+            console.log('No session user found - redirecting to login');
+            return res.redirect('/login');
+        }
+
+        const { bio } = req.body;
+        const username = req.session.user.username;
+
+        // Update the bio in the database
+        const updateQuery = 'UPDATE users SET bio = $1 WHERE username = $2 RETURNING *';
+        console.log('Executing update query:', updateQuery);
+        await db.one(updateQuery, [bio, username]);
+
+        // Redirect back to profile page to see the changes
+        res.redirect('/profile');
+
+    } catch (error) {
+        console.error('Error updating bio:', error);
+        res.status(500).send('Server error');
+    }
+});
+
+app.post('/profile/settings', async (req, res) => {
+    try {
+        if (!req.session.user) {
+            return res.redirect('/login');
+        }
+
+        console.log('Form data received:', req.body);  // Debug line
+        
+        const currentUsername = req.session.user.username;
+        const { username, password } = req.body;
+
+        // Handle username change
+        if (username && username !== currentUsername) {
+            // Check if new username is available
+            const userExists = await db.oneOrNone('SELECT username FROM users WHERE username = $1', [username]);
+            if (userExists) {
+                req.session.message = 'Username already taken';
+                req.session.error = true;
+                return res.redirect('/profile');
+            }
+
+            // Update username in all tables
+            await db.tx(async t => {
+                await t.none('UPDATE users SET username = $1 WHERE username = $2', [username, currentUsername]);
+                await t.none('UPDATE user_stats SET username = $1 WHERE username = $2', [username, currentUsername]);
+                await t.none('UPDATE friends SET user1_username = $1 WHERE user1_username = $2', [username, currentUsername]);
+                await t.none('UPDATE friends SET user2_username = $1 WHERE user2_username = $2', [username, currentUsername]);
+            });
+
+            // Update session
+            req.session.user.username = username;
+        }
+
+        // Handle password change
+        if (password) {
+            const hashedPassword = await bcrypt.hash(password, 10);
+            await db.none('UPDATE users SET password = $1 WHERE username = $2', 
+                [hashedPassword, username || currentUsername]);
+            req.session.user.password = hashedPassword;
+        }
+
+        res.redirect('/profile');
+    } catch (error) {
+        console.error('Error updating profile:', error);
+        res.status(500).send('Error updating profile: ' + error.message);
+    }
+});
 // -------------------------------------  ROUTES for logout.hbs   ----------------------------------------------
 app.get('/logout', (req, res) => {
     req.session.destroy();

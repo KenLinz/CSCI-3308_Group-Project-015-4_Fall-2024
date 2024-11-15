@@ -1,3 +1,4 @@
+{{> message }}
 <div class="container mx-auto p-6">
     {{!-- Profile Header with Centered Username --}}
     <div class="flex items-center justify-center mb-8 space-x-4">
@@ -90,7 +91,7 @@
         <p class="text-gray-700">{{user.bio}}</p>
         <div style="text-align: right; margin-right:15px;">
             <button class="bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700"
-                style="background: blue;">
+                style="background: blue;" onclick="openBioModal()" id="BioButton">
                 Change Bio
             </button>
         </div>
@@ -98,57 +99,134 @@
         <p class="text-gray-600" style="margin-left:10px; margin-right:10px;">No bio added yet</p>
         <div style="text-align: right; margin-right:15px;">
             <button class="bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700" style="background: blue;"
-                onclick="openForm()" id="BioButton">
+                onclick="openBioModal()" id="BioButton">
                 Add Bio
             </button>
-
-            <!-- The Modal -->
-            <div id="myModal" class="modal" style="padding-left:50px; padding-right:50px; padding-top: 50px;">
-
-                <!-- Modal content -->
-                <div class="modal-content">
-                    <button class="close" onclick="closeForm()"
-                        class="bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700"
-                        style="background: red; text-align: right; margin-right:15px; margin-left:auto;">&times;</button>
-                    <h1 style="text-align: center;"><b>Bio</b></h1>
-                    <form action="/profile" method="POST">
-                    <div class="form-group">
-                        <input type="text" name="bio" id="bio" class="form-control" style="" required>
-                    </div>
-                    <br/>
-                    <button type="submit" class="btn btn-primary" style="text-align: center; margin-bottom:10px; margin-right:10px;">Add Bio</button>
-                </form>
-                </div>
-
-            </div>
-
-            <script>
-                // Get the modal
-                var modal = document.getElementById("myModal");
-                // Get the button that opens the modal
-                var btn = document.getElementById("BioButton");
-                // Get the <span> element that closes the modal
-                var span = document.getElementsByClassName("close")[0];
-                // When the user clicks the button, open the modal 
-                btn.onclick = function () {
-                    modal.style.display = "block";
-                }
-                // When the user clicks on <span> (x), close the modal
-                span.onclick = function () {
-                    modal.style.display = "none";
-                }
-                // When the user clicks anywhere outside of the modal, close it
-                window.onclick = function (event) {
-                    if (event.target == modal) {
-                        modal.style.display = "none";
-                    }
-                }
-            </script>
-
         </div>
         {{/if}}
     </div>
     <br />
     <br />
+    <!-- Settings -->
+    <div class="text-left mt-6">
+        <button class="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700" 
+                style="background: gray;" 
+                onclick="openSettingsModal()" 
+                id="SettingsButton">
+            Settings
+        </button>
+    </div>
+
+
+    {{!-- All Modals --}}
+    <!-- Bio Modal -->
+    <div id="bioModal" class="modal" style="padding-left:50px; padding-right:50px; padding-top: 50px;">
+        <!-- Modal content -->
+        <div class="modal-content">
+            <button class="close" onclick="closeBioModal()"
+                class="bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700"
+                style="background: red; text-align: right; margin-right:15px; margin-left:auto;">&times;</button>
+            <h1 style="text-align: center;"><b>Bio</b></h1>
+            <form action="/profile/bio" method="POST">
+            <div class="form-group">
+                <input type="text" name="bio" id="bio" class="form-control" value="{{user.bio}}" required>
+            </div>
+            <br/>
+            <button type="submit" class="btn btn-primary" style="text-align: center; margin-bottom:10px; margin-right:10px;">{{#if user.bio}}Change Bio{{else}}Add Bio{{/if}}</button>
+        </form>
+        </div>
+    </div>  
+
+    <!-- Settings Modal -->
+    <div id="settingsModal" class="modal" style="padding-left:50px; padding-right:50px; padding-top: 50px;">
+        <div class="modal-content">
+            <button class="close" onclick="closeSettingsModal()"
+                class="bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700"
+                style="background: red; text-align: right; margin-right:15px; margin-left:auto;">&times;</button>
+            
+            <h1 style="text-align: center; margin-bottom: 20px;"><b>Profile Settings</b></h1>
+            
+            <form action="/profile/settings" method="POST">
+                <!-- Username Field -->
+                <div class="form-group mb-4">
+                    <label for="username" style="display: block; margin-bottom: 5px;"><b>Username:</b></label>
+                    <input type="text" name="username" id="username" class="form-control w-full p-2 border rounded" 
+                        value="{{user.username}}" required>
+                </div>
+
+                <!-- Password Field -->
+                <div class="form-group mb-4">
+                    <label for="password" style="display: block; margin-bottom: 5px;"><b>New Password:</b></label>
+                    <input type="password" name="password" id="password" class="form-control w-full p-2 border rounded" 
+                        placeholder="Leave blank to keep current password">
+                </div>
+
+                <!-- Confirm Password Field -->
+                <div class="form-group mb-4">
+                    <label for="confirmPassword" style="display: block; margin-bottom: 5px;"><b>Confirm New Password:</b></label>
+                    <input type="password" name="confirmPassword" id="confirmPassword" 
+                        class="form-control w-full p-2 border rounded" 
+                        placeholder="Confirm new password">
+                </div>
+
+                <!-- Submit Button -->
+                <div class="text-center">
+                    <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700" 
+                            style="background: blue; margin-bottom:10px;">
+                        Save Changes
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+    // Get modal elements
+    var bioModal = document.getElementById("bioModal");
+    var settingsModal = document.getElementById("settingsModal");
+
+    // Bio Modal Functions
+    function openBioModal() {
+        bioModal.style.display = "block";
+    }
+
+    function closeBioModal() {
+        bioModal.style.display = "none";
+    }
+
+    // Settings Modal Functions
+    function openSettingsModal() {
+        settingsModal.style.display = "block";
+    }
+
+    function closeSettingsModal() {
+        settingsModal.style.display = "none";
+    }
+
+    // Handle clicking outside modals
+    window.onclick = function(event) {
+        if (event.target == bioModal) {
+            closeBioModal();
+        }
+        if (event.target == settingsModal) {
+            closeSettingsModal();
+        }
+    }
+
+    // Password validation for settings form
+    document.querySelector('form[action="/profile/settings"]').onsubmit = function(e) {
+        var password = document.getElementById('password');
+        var confirmPassword = document.getElementById('confirmPassword');
+        
+        if (password.value || confirmPassword.value) {
+            if (password.value !== confirmPassword.value) {
+                e.preventDefault();
+                alert('Passwords do not match!');
+                return false;
+            }
+        }
+        return true;
+    };
+    </script>   
     <br />
 </div>
