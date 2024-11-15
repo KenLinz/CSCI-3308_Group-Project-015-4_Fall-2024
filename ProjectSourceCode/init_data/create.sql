@@ -18,7 +18,6 @@ CREATE TABLE users (
     total_guesses INTEGER NOT NULL
 );
 
-/*
 -- Stats table (one-to-many relationship with users)
 DROP TABLE IF EXISTS user_stats;
 CREATE TABLE user_stats (
@@ -28,7 +27,6 @@ CREATE TABLE user_stats (
     stat_value INTEGER NOT NULL,
     UNIQUE(username, stat_type)
 );
-*/
 
 -- Friends table (many-to-many relationship)
 DROP TABLE IF EXISTS friends;
