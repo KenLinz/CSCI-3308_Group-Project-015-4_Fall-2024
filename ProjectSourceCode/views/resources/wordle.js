@@ -1145,4 +1145,3 @@ async function check() {
 }
 
 generateWord();
-
