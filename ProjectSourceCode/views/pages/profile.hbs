@@ -88,7 +88,7 @@
         style="color:black; border-radius:10px; border:3px solid black; border-style:rounded; background:lightgray; padding-top:10px; padding-bottom:10px;">
         <h2 class="text-2xl font-bold mb-4" style="text-align: center;">Bio:</h2>
         {{#if user.bio}}
-        <p class="text-gray-700">{{user.bio}}</p>
+        <p class="text-gray-700 text-center" style="margin-left:10px; margin-right:10px;">{{user.bio}}</p>
         <div style="text-align: right; margin-right:15px;">
             <button class="bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700"
                 style="background: blue;" onclick="openBioModal()" id="BioButton">
@@ -96,7 +96,7 @@
             </button>
         </div>
         {{else}}
-        <p class="text-gray-600" style="margin-left:10px; margin-right:10px;">No bio added yet</p>
+        <p class="text-gray-600 text-center" style="margin-left:10px; margin-right:10px;">No bio added yet</p>
         <div style="text-align: right; margin-right:15px;">
             <button class="bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700" style="background: blue;"
                 onclick="openBioModal()" id="BioButton">
@@ -123,6 +123,7 @@
     <div id="bioModal" class="modal" style="padding-left:50px; padding-right:50px; padding-top: 50px;">
         <!-- Modal content -->
         <div class="modal-content">
+            <div class="modal-body">
             <button class="close" onclick="closeBioModal()"
                 class="bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700"
                 style="background: red; text-align: right; margin-right:15px; margin-left:auto;">&times;</button>
@@ -132,14 +133,16 @@
                 <input type="text" name="bio" id="bio" class="form-control" value="{{user.bio}}" required>
             </div>
             <br/>
-            <button type="submit" class="btn btn-primary" style="text-align: center; margin-bottom:10px; margin-right:10px;">{{#if user.bio}}Change Bio{{else}}Add Bio{{/if}}</button>
+            <button type="submit" class="btn btn-primary" style="text-align: center; margin-bottom:10px; margin-left:10px;">{{#if user.bio}}Change Bio{{else}}Add Bio{{/if}}</button>
         </form>
+        </div>
         </div>
     </div>  
 
     <!-- Settings Modal -->
     <div id="settingsModal" class="modal" style="padding-left:50px; padding-right:50px; padding-top: 50px;">
         <div class="modal-content">
+            <div class="modal-body">
             <button class="close" onclick="closeSettingsModal()"
                 class="bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700"
                 style="background: red; text-align: right; margin-right:15px; margin-left:auto;">&times;</button>
@@ -177,6 +180,7 @@
                     </button>
                 </div>
             </form>
+            </div>
         </div>
     </div>
 
