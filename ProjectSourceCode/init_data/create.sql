@@ -32,8 +32,8 @@ CREATE TABLE user_stats (
 DROP TABLE IF EXISTS friends;
 CREATE TABLE friends (
     friendship_id SERIAL PRIMARY KEY,
-    user1_username VARCHAR(50) REFERENCES users(username),
-    user2_username VARCHAR(50) REFERENCES users(username),
+    user_recieved VARCHAR(50) REFERENCES users(username),
+    user_sent VARCHAR(50) REFERENCES users(username),
     status VARCHAR(20) NOT NULL DEFAULT 'pending', -- 'pending', 'accepted', 'rejected'
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     CHECK (user1_username < user2_username), -- Ensures unique friendships
