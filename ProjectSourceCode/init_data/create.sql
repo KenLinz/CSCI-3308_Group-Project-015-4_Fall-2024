@@ -11,9 +11,14 @@ CREATE TABLE users (
     username VARCHAR(50) PRIMARY KEY,
     password CHAR(60) NOT NULL,
     profile_image_path VARCHAR(255),
-    bio TEXT
+    bio TEXT,
+    games_played INTEGER NOT NULL,
+    wins INTEGER NOT NULL,
+    losses INTEGER NOT NULL,
+    total_guesses INTEGER NOT NULL
 );
 
+/*
 -- Stats table (one-to-many relationship with users)
 DROP TABLE IF EXISTS user_stats;
 CREATE TABLE user_stats (
@@ -23,6 +28,7 @@ CREATE TABLE user_stats (
     stat_value INTEGER NOT NULL,
     UNIQUE(username, stat_type)
 );
+*/
 
 -- Friends table (many-to-many relationship)
 DROP TABLE IF EXISTS friends;
