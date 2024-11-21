@@ -133,11 +133,15 @@ async function check() {
 
     //add more stuff to win and loss states eventually!
     if(matchCount == 6){
-        document.getElementById("message").textContent="Game won!";
+        document.getElementById("winlossmsg").textContent="Game won!";
+        document.getElementById("wordmsg").textContent="The word was \"" + word +"\""; 
+        document.getElementById("numguessmsg").textContent="You found the word in " + guesses.length + " guesses!";
         displayEndgamePopup(true);
     }
-    else if(guesses.length == 5){
-        document.getElementById("message").textContent="Game loss!";
+    else if(guesses.length == 6){
+        document.getElementById("winlossmsg").textContent="Game loss!";
+        document.getElementById("wordmsg").textContent="The word was " + word;
+
         displayEndgamePopup(false);
     }
 
@@ -147,7 +151,6 @@ async function check() {
 function displayEndgamePopup(gameWon){
     document.getElementById("popup").style.visibility = 'visible';
 }
-
 
 generateWord();
 

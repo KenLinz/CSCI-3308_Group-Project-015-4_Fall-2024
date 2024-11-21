@@ -19,35 +19,36 @@
 
 <body>
 
-    <button type="button" class="btn btn-primary" 
-    style="border:3px solid black;background-color:gray;border-radius:10px;
-    display:inline-block;" >
-    test endgame popup
-    </button>
 
     <div id="popup">
         <h1>Game Over!!!</h1>
-        <h3>you win/loose</h3>
+        <h3 id="winlossmsg">you win/loose</h3>
+        <h3 id="wordmsg">you win/loose</h3>
+        <h3 id="numguessmsg"></h3>
         
         <div class="Grid" style="style:grid">
             <div id ="Row1" class="Row">
                 <div style="display:inline-block; margin-right: 10px;">
-                    <p>Stat1</p>
-                    <p>00</p>
+                    <p>Win/loss ratio</p>
+                    <p id="ratio">--</p>
                 </div>
                 <div style="display:inline-block; margin-right: 10px;">
-                    <p>Stat2</p>
-                    <p>00</p>
+                    <p>Avg guesses per game</p>
+                    <p id="avgguess">--</p>
                 </div>
                 <div style="display:inline-block; margin-right: 10px;">
-                    <p>Stat3</p>
-                    <p>00</p>
+                    <p>Winstreak</p>
+                    <p id="winstreak">--</p>
                 </div>
             </div>
         </div>
-        <p>emoji thing goes here! (can be button or just straight text lol)</p>
-        <button>return to home</button>
-        <button>play again</button>
+        <p>emoji results goes here!</p>
+
+            <div  style="font-family:impact; margin-left:10px;text-align:center">
+                <a style="display:inline-block;color:black; border-radius:10px; border:3px solid black; border-style:rounded; background:gray;margin-bottom: 10px;" class="link" href="/play_singleplayer">play again</a>
+                <a style="display:inline-block;color:black; border-radius:10px; border:3px solid black; border-style:rounded; background:gray;margin-bottom: 10px;" class="link" href="/home">return to home</a>
+            </div>
+
     </div>
 
 
@@ -166,6 +167,27 @@
                 </div>
                 <div id="letterbox56" class="letterbox">
                     <p id="Letter56" style="margin-top: 10px;"></p>
+                </div>
+            </div>
+
+            <div id="Row6" class="Row">
+                <div id="letterbox61" class="letterbox">
+                    <p id="Letter61" style="margin-top: 10px;"></p>
+                </div>
+                <div id="letterbox62" class="letterbox">
+                    <p id="Letter62" style="margin-top: 10px;"></p>
+                </div>
+                <div id="letterbox63" class="letterbox">
+                    <p id="Letter63" style="margin-top: 10px;"></p>
+                </div>
+                <div id="letterbox64" class="letterbox">
+                    <p id="Letter64" style="margin-top: 10px;"></p>
+                </div>
+                <div id="letterbox65" class="letterbox">
+                    <p id="Letter65" style="margin-top: 10px;"></p>
+                </div>
+                <div id="letterbox66" class="letterbox">
+                    <p id="Letter66" style="margin-top: 10px;"></p>
                 </div>
             </div>
 
