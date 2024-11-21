@@ -44,6 +44,7 @@ async function generateWord() {
     }
 
     console.log("WORD IS: " + word);
+
 }
 
 function drawGuess(index, char, color) {
@@ -133,12 +134,20 @@ async function check() {
     //add more stuff to win and loss states eventually!
     if(matchCount == 6){
         document.getElementById("message").textContent="Game won!";
+        displayEndgamePopup(true);
     }
     else if(guesses.length == 5){
         document.getElementById("message").textContent="Game loss!";
+        displayEndgamePopup(false);
     }
 
     return;
 }
 
+function displayEndgamePopup(gameWon){
+    document.getElementById("popup").style.visibility = 'visible';
+}
+
+
 generateWord();
+
