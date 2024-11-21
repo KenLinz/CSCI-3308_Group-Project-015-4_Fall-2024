@@ -124,7 +124,7 @@ app.get('/register', (req, res) => {
 app.post('/register', async (req, res) => {
     const username = req.body.username;
     const hash = await bcrypt.hash(req.body.password, 10);
-    const query = 'INSERT INTO users (username, password) VALUES ($1, $2) returning * ;';
+    const query = 'INSERT INTO users (username, password, games_played, total_guesses, wins, losses) VALUES ($1, $2, 0, 0, 0, 0) returning * ;';
     db.any(query, [
         username,
         hash
@@ -260,10 +260,10 @@ app.get('/profile', async (req, res) => {
             username: req.session.user.username,
             profileImage: userData.profile_image_path,
             bio: userData.bio,
-            stats: statsData.map(stat => ({
-                label: stat.stat_type,
-                value: stat.stat_value
-            }))
+            games_played: userData.games_played,
+            total_guesses: userData.total_guesses,
+            wins: userData.wins,
+            losses: userData.losses
         };
         console.log('Final user object being sent to template:', user);
 
