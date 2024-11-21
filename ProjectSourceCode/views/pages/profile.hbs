@@ -23,6 +23,7 @@
     <div class="mb-8"
         style="color:black; border-radius:10px; border:3px solid black; border-style:rounded; background:lightgray; padding-top:10px;">
         <h2 class="text-2xl font-bold mb-4" style="text-align: center;">Stats</h2>
+        {{#if user.stats}}
         <div class="overflow-x-auto">
             <table class="w-full">
                 <thead class="border-b-2">
@@ -32,25 +33,18 @@
                     </tr>
                 </thead>
                 <tbody>
+                    {{#each user.stats}}
                     <tr class="border-b">
-                        <td class="py-3">Games Played &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</td>
-                        <td class="text-right py-3"> {{user.games_played}} </td>
+                        <td class="py-3">{{this.label}}</td>
+                        <td class="text-right py-3">{{this.value}}</td>
                     </tr>
-                    <tr class="border-b">
-                        <td class="py-3">Total Guesses</td>
-                        <td class="text-right py-3"> {{user.total_guesses}} </td>
-                    </tr>
-                    <tr class="border-b">
-                        <td class="py-3">Wins</td>
-                        <td class="text-right py-3"> {{user.wins}} </td>
-                    </tr>
-                    <tr class="border-b">
-                        <td class="py-3">Losses</td>
-                        <td class="text-right py-3"> {{user.losses}} </td>
-                    </tr>
+                    {{/each}}
                 </tbody>
             </table>
         </div>
+        {{else}}
+        <p class="text-gray-600 text-center">No stats available</p>
+        {{/if}}
     </div>
     <br />
     <br />
