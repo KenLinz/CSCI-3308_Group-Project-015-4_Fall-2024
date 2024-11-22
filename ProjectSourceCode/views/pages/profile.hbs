@@ -24,7 +24,8 @@
         style="color:black; border-radius:10px; border:3px solid black; border-style:rounded; background:lightgray; padding-top:10px;">
         <h2 class="text-2xl font-bold mb-4" style="text-align: center;">Stats</h2>
         <div class="overflow-x-auto">
-            <table class="table" style="border:3px solid black; padding-top:10px; width:80%; margin: 0 auto; margin-bottom:20px;">
+            <table class="table"
+                style="border:3px solid black; padding-top:10px; width:80%; margin: 0 auto; margin-bottom:20px;">
                 <thead class="border-b-2">
                     <tr>
                         <th class="text-left py-2">Stat</th>
@@ -58,18 +59,76 @@
     <div class="mb-8"
         style="color:black; border-radius:10px; border:3px solid black; border-style:rounded; background:lightgray; padding-top:10px; padding-bottom:10px;">
         <h2 class="text-2xl font-bold mb-4" style="text-align: center;">Friends</h2>
+        {{#if user.pendingfriends}}
+        <div class="overflow-x-auto">
+            <table class="table"
+                style="border:3px solid black; padding-top:10px; width:80%; margin: 0 auto; margin-bottom:20px;">
+                <thead>
+                    <th>Incoming Friend Requests</th>
+                    <th></th>
+                    <th></th>
+                </thead>
+                <tbody>
+                    {{#each user.pendingfriends}}
+                    <tr class="border-b">
+                        <td class="py-3 text-left"><b>User: </b>{{this}}</td>
+
+                        <td style="text-align: right;">
+                            <form action="/profile/acceptrequest" method="POST">
+                                <div class="form-group">
+                                    <input type="hidden" name="usersent" id="usersent" class="form-control"
+                                        style="display:block;" value="{{this}}">
+                                </div>
+
+                                <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+                                    style="background: green; margin-bottom:10px;">
+                                    Accept
+                                </button>
+                            </form>
+                        </td>
+
+                        <td style="text-align: left;">
+                            <form action="/profile/denyrequest" method="POST">
+                                <div class="form-group">
+                                    <input type="hidden" name="usersent" id="usersent" class="form-control"
+                                        style="display:block;" value="{{this}}">
+                                </div>
+
+                                <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+                                    style="background: red; margin-bottom:10px;">
+                                    Deny
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+        {{/if}}
+
         {{#if user.friends}}
         <div class="overflow-x-auto">
-            <table class="w-full">
+            <table class="table"
+                style="border:3px solid black; padding-top:10px; width:80%; margin: 0 auto; margin-bottom:20px;">
+                <thead>
+                    <th>Friends List</th>
+                    <th></th>
+                    <th></th>
+                </thead>
                 <tbody>
                     {{#each user.friends}}
                     <tr class="border-b">
-                        <td class="py-3">{{this.name}}</td>
-                        <td class="py-3 text-right">
-                            <button class="bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700">
-                                Invite to Match
-                            </button>
-                        </td>
+                        <td class="py-3 text-left"><b>User: </b>{{this}}</td>
+                        <td style="text-align: right;"><button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+                                    style="background: orange; margin-bottom:10px;">
+                                    Challenge
+                                </button></td>
+                        <td style="text-align: left;"><button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+                                    style="background: red; margin-bottom:10px;">
+                                    Remove
+                                </button></td>
+                        
                     </tr>
                     {{/each}}
                 </tbody>
@@ -78,14 +137,16 @@
         {{else}}
         <div class="flex justify-between items-center">
             <p class="text-gray-600 text-center">No friends added yet</p>
+        </div>
+        {{/if}}
+        <div>
             <div style="text-align: right; margin-right:15px;">
                 <button class="bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700"
-                    style="background: blue;">
+                    style="background: blue;" id="FriendsButton" onclick="openFriendsModal()">
                     Add Friends
                 </button>
             </div>
         </div>
-        {{/if}}
     </div>
     <br />
     <br />
@@ -96,8 +157,8 @@
         {{#if user.bio}}
         <p class="text-gray-700 text-center" style="margin-left:10px; margin-right:10px;">{{user.bio}}</p>
         <div style="text-align: right; margin-right:15px;">
-            <button class="bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700"
-                style="background: blue;" onclick="openBioModal()" id="BioButton">
+            <button class="bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700" style="background: blue;"
+                onclick="openBioModal()" id="BioButton">
                 Change Bio
             </button>
         </div>
@@ -115,10 +176,8 @@
     <br />
     <!-- Settings -->
     <div class="text-left mt-6">
-        <button class="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700" 
-                style="background: gray;" 
-                onclick="openSettingsModal()" 
-                id="SettingsButton">
+        <button class="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700" style="background: gray;"
+            onclick="openSettingsModal()" id="SettingsButton">
             Settings
         </button>
     </div>
@@ -128,115 +187,166 @@
     <!-- Bio Modal -->
     <div id="bioModal" class="modal" style="padding-left:50px; padding-right:50px; padding-top: 50px;">
         <!-- Modal content -->
-        <div class="modal-content">
+        <div class="modal-content" style="background:orange;">
             <div class="modal-body">
-            <button class="close" onclick="closeBioModal()"
-                class="bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700"
-                style="background: red; text-align: right; margin-right:15px; margin-left:auto;">&times;</button>
-            <h1 style="text-align: center;"><b>Bio</b></h1>
-            <form action="/profile/bio" method="POST">
-            <div class="form-group">
-                <input type="text" name="bio" id="bio" class="form-control" value="{{user.bio}}" required>
-            </div>
-            <br/>
-            <button type="submit" class="btn btn-primary" style="text-align: center; margin-bottom:10px; margin-left:10px;">{{#if user.bio}}Change Bio{{else}}Add Bio{{/if}}</button>
-        </form>
-        </div>
-        </div>
-    </div>  
-
-    <!-- Settings Modal -->
-    <div id="settingsModal" class="modal" style="padding-left:50px; padding-right:50px; padding-top: 50px;">
-        <div class="modal-content">
-            <div class="modal-body">
-            <button class="close" onclick="closeSettingsModal()"
-                class="bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700"
-                style="background: red; text-align: right; margin-right:15px; margin-left:auto;">&times;</button>
-            
-            <h1 style="text-align: center; margin-bottom: 20px;"><b>Profile Settings</b></h1>
-            
-            <form action="/profile/settings" method="POST">
-                <!-- Username Field -->
-                <div class="form-group mb-4">
-                    <label for="username" style="display: block; margin-bottom: 5px;"><b>Username:</b></label>
-                    <input type="text" name="username" id="username" class="form-control w-full p-2 border rounded" 
-                        value="{{user.username}}" required>
-                </div>
-
-                <!-- Password Field -->
-                <div class="form-group mb-4">
-                    <label for="password" style="display: block; margin-bottom: 5px;"><b>New Password:</b></label>
-                    <input type="password" name="password" id="password" class="form-control w-full p-2 border rounded" 
-                        placeholder="Leave blank to keep current password">
-                </div>
-
-                <!-- Confirm Password Field -->
-                <div class="form-group mb-4">
-                    <label for="confirmPassword" style="display: block; margin-bottom: 5px;"><b>Confirm New Password:</b></label>
-                    <input type="password" name="confirmPassword" id="confirmPassword" 
-                        class="form-control w-full p-2 border rounded" 
-                        placeholder="Confirm new password">
-                </div>
-
-                <!-- Submit Button -->
-                <div class="text-center">
-                    <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700" 
+                <button class="close" onclick="closeBioModal()"
+                    class="bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700"
+                    style="background: red; text-align: right; margin-right:15px; margin-left:auto;">&times;</button>
+                <h1 style="text-align: center;"><b>Bio</b></h1>
+                <form action="/profile/bio" method="POST">
+                    <div class="form-group">
+                        <input type="text" name="bio" id="bio" class="form-control" value="{{user.bio}}" required>
+                    </div>
+                    <br />
+                    <div class="text-center">
+                        <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
                             style="background: blue; margin-bottom:10px;">
-                        Save Changes
-                    </button>
-                </div>
-            </form>
+                            {{#if user.bio}}Change
+                            Bio{{else}}Add Bio{{/if}}
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
 
+    <!-- Settings Modal -->
+    <div id="settingsModal" class="modal" style="padding-left:50px; padding-right:50px; padding-top: 50px;">
+        <div class="modal-content" style="background:orange;">
+            <div class="modal-body">
+                <button class="close" onclick="closeSettingsModal()"
+                    class="bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700"
+                    style="background: red; text-align: right; margin-right:15px; margin-left:auto;">&times;</button>
+
+                <h1 style="text-align: center; margin-bottom: 20px;"><b>Profile Settings</b></h1>
+
+                <form action="/profile/settings" method="POST">
+                    <!-- Username Field -->
+                    <div class="form-group mb-4">
+                        <label for="username" style="display: block; margin-bottom: 5px;"><b>Username:</b></label>
+                        <input type="text" name="username" id="username" class="form-control w-full p-2 border rounded"
+                            value="{{user.username}}" required>
+                    </div>
+
+                    <!-- Password Field -->
+                    <div class="form-group mb-4">
+                        <label for="password" style="display: block; margin-bottom: 5px;"><b>New Password:</b></label>
+                        <input type="password" name="password" id="password"
+                            class="form-control w-full p-2 border rounded"
+                            placeholder="Leave blank to keep current password">
+                    </div>
+
+                    <!-- Confirm Password Field -->
+                    <div class="form-group mb-4">
+                        <label for="confirmPassword" style="display: block; margin-bottom: 5px;"><b>Confirm New
+                                Password:</b></label>
+                        <input type="password" name="confirmPassword" id="confirmPassword"
+                            class="form-control w-full p-2 border rounded" placeholder="Confirm new password">
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="text-center">
+                        <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+                            style="background: blue; margin-bottom:10px;">
+                            Save Changes
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Friends Modal -->
+    <div id="friendsModal" class="modal" style="padding-left:50px; padding-right:50px; padding-top: 50px;">
+        <div class="modal-content" style="background:orange;">
+            <div class="modal-body">
+                <button class="close" onclick="closeFriendsModal()"
+                    class="bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700"
+                    style="background: red; text-align: right; margin-right:15px; margin-left:auto;">&times;</button>
+
+                <h1 style="text-align: center; margin-bottom: 20px;"><b>Add a Friend!</b></h1>
+
+                <form action="/profile/friends" method="POST">
+                    <!-- Username Field -->
+                    <div class="form-group mb-4">
+                        <label for="username" style="display: block; margin-bottom: 5px;"><b>Username of
+                                Friend:</b></label>
+                        <input type="text" name="friendsusername" id="friendsusername"
+                            class="form-control w-full p-2 border rounded" required>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="text-center">
+                        <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+                            style="background: blue; margin-bottom:10px;">
+                            Add
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
     <script>
-    // Get modal elements
-    var bioModal = document.getElementById("bioModal");
-    var settingsModal = document.getElementById("settingsModal");
+        // Get modal elements
+        var bioModal = document.getElementById("bioModal");
+        var settingsModal = document.getElementById("settingsModal");
 
-    // Bio Modal Functions
-    function openBioModal() {
-        bioModal.style.display = "block";
-    }
-
-    function closeBioModal() {
-        bioModal.style.display = "none";
-    }
-
-    // Settings Modal Functions
-    function openSettingsModal() {
-        settingsModal.style.display = "block";
-    }
-
-    function closeSettingsModal() {
-        settingsModal.style.display = "none";
-    }
-
-    // Handle clicking outside modals
-    window.onclick = function(event) {
-        if (event.target == bioModal) {
-            closeBioModal();
+        // Bio Modal Functions
+        function openBioModal() {
+            bioModal.style.display = "block";
         }
-        if (event.target == settingsModal) {
-            closeSettingsModal();
-        }
-    }
 
-    // Password validation for settings form
-    document.querySelector('form[action="/profile/settings"]').onsubmit = function(e) {
-        var password = document.getElementById('password');
-        var confirmPassword = document.getElementById('confirmPassword');
-        
-        if (password.value || confirmPassword.value) {
-            if (password.value !== confirmPassword.value) {
-                e.preventDefault();
-                alert('Passwords do not match!');
-                return false;
+        function closeBioModal() {
+            bioModal.style.display = "none";
+        }
+
+        // Settings Modal Functions
+        function openSettingsModal() {
+            settingsModal.style.display = "block";
+        }
+
+        function closeSettingsModal() {
+            settingsModal.style.display = "none";
+        }
+
+        // Friends Modal Functions
+        function openFriendsModal() {
+            friendsModal.style.display = "block";
+        }
+
+        function closeFriendsModal() {
+            friendsModal.style.display = "none";
+        }
+
+        // Handle clicking outside modals
+        window.onclick = function (event) {
+            if (event.target == bioModal) {
+                closeBioModal();
+            }
+            if (event.target == settingsModal) {
+                closeSettingsModal();
+            }
+            if (event.target == friendsModal) {
+                closeFriendsModal();
             }
         }
-        return true;
-    };
-    </script>   
+
+        // Password validation for settings form
+        document.querySelector('form[action="/profile/settings"]').onsubmit = function (e) {
+            var password = document.getElementById('password');
+            var confirmPassword = document.getElementById('confirmPassword');
+
+            if (password.value || confirmPassword.value) {
+                if (password.value !== confirmPassword.value) {
+                    e.preventDefault();
+                    alert('Passwords do not match!');
+                    return false;
+                }
+            }
+            return true;
+        };
+    </script>
     <br />
 </div>

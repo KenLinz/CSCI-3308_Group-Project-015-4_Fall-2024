@@ -100,8 +100,8 @@ app.get('/all', (req, res) => {
 });
 
 app.get('/welcome', (req, res) => {
-    res.json({status: 'success', message: 'Welcome!'});
-  });
+    res.json({ status: 'success', message: 'Welcome!' });
+});
 
 // -------------------------------------  ROUTES for register.hbs   ----------------------------------------------
 const user = {
@@ -117,7 +117,7 @@ app.get('/register', (req, res) => {
         });
     }
     else {
-    res.render('pages/register');
+        res.render('pages/register');
     }
 });
 
@@ -132,7 +132,7 @@ app.post('/register', async (req, res) => {
         .then(data => {
             // TEST CASE
             // res.status('200').json({message: 'Successfully created account!'});
-            
+
             // /*
             res.render('pages/login', {
                 message: "Successfully created account!",
@@ -162,9 +162,9 @@ app.get('/login', (req, res) => {
         });
     }
     else {
-    res.render('pages/login', {
-        message: undefined,
-    });
+        res.render('pages/login', {
+            message: undefined,
+        });
     }
 });
 
@@ -175,7 +175,7 @@ app.post('/login', (req, res) => {
 
     db.one(query, values)
         .then(async data => {
-            
+
             // TEST CASE
             // res.status('200').json({message: 'Successfully logged in!'});
 
@@ -265,7 +265,9 @@ app.get('/profile', async (req, res) => {
             games_played: userData.games_played,
             total_guesses: userData.total_guesses,
             wins: userData.wins,
-            losses: userData.losses
+            losses: userData.losses,
+            friends: userData.friends,
+            pendingfriends: userData.pendingfriends
         };
         console.log('Final user object being sent to template:', user);
 
@@ -274,7 +276,7 @@ app.get('/profile', async (req, res) => {
         req.session.message = req.session.error = null;
 
         res.render('pages/profile', { user, message, error });
-       
+
     } catch (error) {
         console.error('Error in profile route:', error);
         res.status(500).send('Server error');
@@ -313,7 +315,7 @@ app.post('/profile/settings', async (req, res) => {
         }
 
         console.log('Form data received:', req.body);  // Debug line
-        
+
         const currentUsername = req.session.user.username;
         const { username, password } = req.body;
 
@@ -330,9 +332,6 @@ app.post('/profile/settings', async (req, res) => {
             // Update username in all tables
             await db.tx(async t => {
                 await t.none('UPDATE users SET username = $1 WHERE username = $2', [username, currentUsername]);
-                await t.none('UPDATE user_stats SET username = $1 WHERE username = $2', [username, currentUsername]);
-                await t.none('UPDATE friends SET user1_username = $1 WHERE user1_username = $2', [username, currentUsername]);
-                await t.none('UPDATE friends SET user2_username = $1 WHERE user2_username = $2', [username, currentUsername]);
             });
 
             // Update session
@@ -342,7 +341,7 @@ app.post('/profile/settings', async (req, res) => {
         // Handle password change
         if (password) {
             const hashedPassword = await bcrypt.hash(password, 10);
-            await db.none('UPDATE users SET password = $1 WHERE username = $2', 
+            await db.none('UPDATE users SET password = $1 WHERE username = $2',
                 [hashedPassword, username || currentUsername]);
             req.session.user.password = hashedPassword;
         }
@@ -353,6 +352,157 @@ app.post('/profile/settings', async (req, res) => {
         res.status(500).send('Error updating profile: ' + error.message);
     }
 });
+
+app.post('/profile/friends', async (req, res) => {
+    try {
+        if (!req.session.user) {
+            return res.redirect('/login');
+        }
+
+        console.log('Form data received:', req.body);  // Debug line
+
+        // Finding Input and Current User
+        const currentUsername = req.session.user.username;
+        const { friendsusername } = req.body;
+
+        // Check for self-add
+        if (friendsusername == currentUsername) {
+            req.session.message = 'You can\'t add yourself silly!';
+            req.session.error = true;
+            return res.redirect('/profile');
+        }
+
+        // Check for friend's existence (sad I know)
+        const userExists = await db.oneOrNone('SELECT username FROM users WHERE username = $1', [friendsusername]);
+        if (!userExists) {
+            req.session.message = 'Nobody found with that Username!';
+            req.session.error = true;
+            return res.redirect('/profile');
+        }
+
+        // Checks if Added
+        const AlreadyAddedFriends = await db.one('SELECT $2 = ANY(friends) AS result FROM users WHERE username = $1', [currentUsername, friendsusername]);
+        const AlreadyAddedPendingSent = await db.one('SELECT $2 = ANY(pendingfriends) AS result FROM users WHERE username = $1', [friendsusername, currentUsername]);
+        const AlreadyAddedPendingHas = await db.one('SELECT $1 = ANY(pendingfriends) AS result FROM users WHERE username = $2', [friendsusername, currentUsername]);
+        console.log('ArrayFriends: ', AlreadyAddedFriends.result);  // Debug line
+        console.log('ArrayPendingSent: ', AlreadyAddedPendingSent.result);  // Debug line
+        console.log('ArrayPendingHas: ', AlreadyAddedPendingHas.result);  // Debug line
+
+        if((AlreadyAddedFriends.result == true)||(AlreadyAddedPendingSent.result == true)||(AlreadyAddedPendingHas.result == true)) {
+            req.session.message = 'Can\'t add a friend, someone you\'ve added, or someone who\'s added you silly!';
+            req.session.error = true;
+            return res.redirect('/profile');
+        }
+        
+        // Add Friend
+        await db.tx(async t => {
+            await t.none(
+                'UPDATE users SET pendingfriends = ARRAY_APPEND(pendingfriends, $2) WHERE username = $1',
+                [friendsusername, currentUsername]
+            );
+        });
+
+        req.session.message = 'Successfully added user!';
+        return res.redirect('/profile');
+
+    } catch (error) {
+        console.error('Error adding pending friend:', error);
+        res.status(500).send('Error adding pending friend: ' + error.message);
+    }
+});
+
+app.post('/profile/denyrequest', async (req, res) => {
+    try {
+        if (!req.session.user) {
+            return res.redirect('/login');
+        }
+
+        // Finding Input and Current User
+        const currentUsername = req.session.user.username;
+        const friendsusername = req.body.usersent;
+
+
+        // Check for friend's existence (sad I know)
+        const userExists = await db.oneOrNone('SELECT username FROM users WHERE username = $1', [friendsusername]);
+        if (!userExists) {
+            req.session.message = 'Nobody found with that Username!';
+            req.session.error = true;
+            await db.tx(async t => {
+                await t.none(
+                    'UPDATE users SET pendingfriends = ARRAY_REMOVE(pendingfriends, $1) WHERE username = $2',
+                    [friendsusername, currentUsername]
+                );
+            })
+            return res.redirect('/profile');
+        }
+
+        // Deny Friend
+        await db.tx(async t => {
+            await t.none(
+                'UPDATE users SET pendingfriends = ARRAY_REMOVE(pendingfriends, $1) WHERE username = $2',
+                [friendsusername, currentUsername]
+            );
+        })
+
+        req.session.message = 'Successfully denied user!';
+        return res.redirect('/profile');
+
+    } catch (error) {
+        console.error('Error denying friend', error);
+        res.status(500).send('Error denying friend: ' + error.message);
+    }
+});
+
+app.post('/profile/acceptrequest', async (req, res) => {
+    try {
+        if (!req.session.user) {
+            return res.redirect('/login');
+        }
+
+        // Finding Input and Current User
+        const currentUsername = req.session.user.username;
+        const friendsusername = req.body.usersent;
+
+
+        // Check for friend's existence (sad I know)
+        const userExists = await db.oneOrNone('SELECT username FROM users WHERE username = $1', [friendsusername]);
+        if (!userExists) {
+            req.session.message = 'Nobody found with that Username!';
+            req.session.error = true;
+            await db.tx(async t => {
+                await t.none(
+                    'UPDATE users SET pendingfriends = ARRAY_REMOVE(pendingfriends, $1) WHERE username = $2',
+                    [friendsusername, currentUsername]
+                );
+            })
+            return res.redirect('/profile');
+        }
+
+        // Accept Friend
+        await db.tx(async t => {
+            await t.none(
+                'UPDATE users SET pendingfriends = ARRAY_REMOVE(pendingfriends, $1) WHERE username = $2',
+                [friendsusername, currentUsername]
+            );
+            await t.none(
+                'UPDATE users SET friends = ARRAY_APPEND(friends, $1) WHERE username = $2',
+                [friendsusername, currentUsername]
+            );
+            await t.none(
+                'UPDATE users SET friends = ARRAY_APPEND(friends, $2) WHERE username = $1',
+                [friendsusername, currentUsername]
+            );
+        })
+
+        req.session.message = 'Successfully accepted user as a friend!';
+        return res.redirect('/profile');
+
+    } catch (error) {
+        console.error('Error denying friend', error);
+        res.status(500).send('Error denying friend: ' + error.message);
+    }
+});
+
 // -------------------------------------  ROUTES for logout.hbs   ----------------------------------------------
 app.get('/logout', (req, res) => {
     req.session.destroy();

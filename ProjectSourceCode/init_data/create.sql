@@ -15,7 +15,9 @@ CREATE TABLE users (
     games_played INTEGER NOT NULL,
     total_guesses INTEGER NOT NULL,
     wins INTEGER NOT NULL,
-    losses INTEGER NOT NULL
+    losses INTEGER NOT NULL,
+    friends TEXT [],
+    pendingfriends TEXT []
 );
 
 /*
@@ -30,6 +32,7 @@ CREATE TABLE user_stats (
 );
 */
 
+/*
 -- Friends table (many-to-many relationship)
 DROP TABLE IF EXISTS friends;
 CREATE TABLE friends (
@@ -39,3 +42,4 @@ CREATE TABLE friends (
     status VARCHAR(20) NOT NULL DEFAULT 'pending', -- 'pending', 'accepted', 'rejected'
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+*/
