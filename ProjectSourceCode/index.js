@@ -552,6 +552,46 @@ app.post('/profile/remove', async (req, res) => {
     }
 });
 
+app.post('/api/updateStats', async (req, res) => {
+    try {
+        if (!req.session.user) {
+            return res.redirect('/login');
+        }
+
+        const username = req.session.user.username;
+        const { gamesPlayed, totalGuesses, wins, losses } = req.body;
+
+         // If it's a win, increment streak; if loss, reset to 0
+         const streakUpdate = wins === 1 ? 
+         'current_streak + 1' : 
+         '0';
+
+        const query = `
+            UPDATE users 
+            SET games_played = games_played + $1,
+                total_guesses = total_guesses + $2,
+                wins = wins + $3,
+                losses = losses + $4,
+                current_streak = ${streakUpdate}
+            WHERE username = $5
+            RETURNING games_played, total_guesses, wins, losses, current_streak
+        `;
+
+        const result = await db.one(query, [
+            gamesPlayed,
+            totalGuesses,
+            wins,
+            losses,
+            username
+        ]);
+
+        res.json(result);
+    } catch (error) {
+        console.error('Error updating stats:', error);
+        res.status(500).json({ error: 'Failed to update stats' });
+    }
+});
+
 // -------------------------------------  ROUTES for logout.hbs   ----------------------------------------------
 app.get('/logout', (req, res) => {
     req.session.destroy();
