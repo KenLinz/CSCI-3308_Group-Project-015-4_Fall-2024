@@ -72,7 +72,6 @@
                     {{#each user.pendingfriends}}
                     <tr class="border-b">
                         <td class="py-3 text-left"><b>User: </b>{{this}}</td>
-
                         <td style="text-align: right;">
                             <form action="/profile/acceptrequest" method="POST">
                                 <div class="form-group">
@@ -86,14 +85,12 @@
                                 </button>
                             </form>
                         </td>
-
                         <td style="text-align: left;">
                             <form action="/profile/denyrequest" method="POST">
                                 <div class="form-group">
                                     <input type="hidden" name="usersent" id="usersent" class="form-control"
                                         style="display:block;" value="{{this}}">
                                 </div>
-
                                 <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
                                     style="background: red; margin-bottom:10px;">
                                     Deny
@@ -120,15 +117,25 @@
                     {{#each user.friends}}
                     <tr class="border-b">
                         <td class="py-3 text-left"><b>User: </b>{{this}}</td>
-                        <td style="text-align: right;"><button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-                                    style="background: orange; margin-bottom:10px;">
-                                    Challenge
-                                </button></td>
-                        <td style="text-align: left;"><button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+                        <td style="text-align: right;"><button type="submit"
+                                class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+                                style="background: orange; margin-bottom:10px;">
+                                Challenge
+                            </button></td>
+                        <td style="text-align: left;">
+                            <form action="/profile/remove" method="POST">
+                                <div class="form-group">
+                                    <input type="hidden" name="usersent" id="usersent" class="form-control"
+                                        style="display:block;" value="{{this}}">
+                                </div>
+
+                                <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
                                     style="background: red; margin-bottom:10px;">
                                     Remove
-                                </button></td>
-                        
+                                </button>
+                        </form>
+                        </td>
+
                     </tr>
                     {{/each}}
                 </tbody>

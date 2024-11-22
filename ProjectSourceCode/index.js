@@ -503,6 +503,55 @@ app.post('/profile/acceptrequest', async (req, res) => {
     }
 });
 
+app.post('/profile/remove', async (req, res) => {
+    try {
+        if (!req.session.user) {
+            return res.redirect('/login');
+        }
+
+        // Finding Input and Current User
+        const currentUsername = req.session.user.username;
+        const friendsusername = req.body.usersent;
+
+
+        // Check for friend's existence (sad I know)
+        const userExists = await db.oneOrNone('SELECT username FROM users WHERE username = $1', [friendsusername]);
+        if (!userExists) {
+            req.session.message = 'Nobody found with that Username!';
+            req.session.error = true;
+            await db.tx(async t => {
+                await t.none(
+                    'UPDATE users SET friends = ARRAY_REMOVE(friends, $1) WHERE username = $2',
+                    [friendsusername, currentUsername]
+                );
+            })
+            return res.redirect('/profile');
+        }
+
+        // Remove Friend
+        await db.tx(async t => {
+            await t.none(
+                'UPDATE users SET friends = ARRAY_REMOVE(friends, $1) WHERE username = $2',
+                [friendsusername, currentUsername]
+            );
+        })
+
+        await db.tx(async t => {
+            await t.none(
+                'UPDATE users SET friends = ARRAY_REMOVE(friends, $2) WHERE username = $1',
+                [friendsusername, currentUsername]
+            );
+        })
+
+        req.session.message = 'Successfully removed user!';
+        return res.redirect('/profile');
+
+    } catch (error) {
+        console.error('Error removing friend', error);
+        res.status(500).send('Error removing friend: ' + error.message);
+    }
+});
+
 // -------------------------------------  ROUTES for logout.hbs   ----------------------------------------------
 app.get('/logout', (req, res) => {
     req.session.destroy();
