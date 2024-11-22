@@ -16,6 +16,7 @@ CREATE TABLE users (
     total_guesses INTEGER NOT NULL,
     wins INTEGER NOT NULL,
     losses INTEGER NOT NULL,
+    current_streak INTEGER NOT NULL DEFAULT 0,
     friends TEXT [],
     pendingfriends TEXT []
 );
