@@ -318,32 +318,13 @@ app.post('/profile/settings', async (req, res) => {
         console.log('Form data received:', req.body);  // Debug line
 
         const currentUsername = req.session.user.username;
-        const { username, password } = req.body;
-
-        // Handle username change
-        if (username && username !== currentUsername) {
-            // Check if new username is available
-            const userExists = await db.oneOrNone('SELECT username FROM users WHERE username = $1', [username]);
-            if (userExists) {
-                req.session.message = 'Username already taken';
-                req.session.error = true;
-                return res.redirect('/profile');
-            }
-
-            // Update username in all tables
-            await db.tx(async t => {
-                await t.none('UPDATE users SET username = $1 WHERE username = $2', [username, currentUsername]);
-            });
-
-            // Update session
-            req.session.user.username = username;
-        }
+        const { password } = req.body;
 
         // Handle password change
         if (password) {
             const hashedPassword = await bcrypt.hash(password, 10);
             await db.none('UPDATE users SET password = $1 WHERE username = $2',
-                [hashedPassword, username || currentUsername]);
+                [hashedPassword, currentUsername]);
             req.session.user.password = hashedPassword;
         }
 
