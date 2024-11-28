@@ -62,18 +62,20 @@ function drawGuess(index, char, color) {
 }
 
 
-async function updateUserStats(gameWon, numGuesses) {
+async function updateUserStats(word, numGuesses) {
     try {
-        const response = await fetch('/api/updateStats', {
+        console.log(document.getElementById("userrecieved").textContent);
+        console.log("WORD IS " + word);
+        console.log(numGuesses);
+        const response = await fetch('/api/newchallenge', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                gamesPlayed: 1,
-                totalGuesses: numGuesses,
-                wins: gameWon ? 1 : 0,
-                losses: gameWon ? 0 : 1
+                userrecieved: document.getElementById("userrecieved").textContent,
+                wordleword: word,
+                usersent_guesses: numGuesses
             })
         });
 
@@ -81,25 +83,11 @@ async function updateUserStats(gameWon, numGuesses) {
             throw new Error('Failed to update stats');
         }
 
-        const stats = await response.json();
-        
-        // Calculate and display stats
-        const ratio = stats.wins === 0 ? 
-            0 : 
-            (stats.wins / (stats.wins + stats.losses)).toFixed(2);
-            
-        const avgGuesses = stats.games_played === 0 ? 
-            0 : 
-            (stats.total_guesses / stats.games_played).toFixed(1);
+        const newmatch = await response.json();
 
-        // Update the popup elements
-        document.getElementById('ratio').textContent = ratio;
-        document.getElementById('avgguess').textContent = avgGuesses;
-        document.getElementById('winstreak').textContent = stats.current_streak;
-
-        console.log('Stats updated successfully:', stats);
+        console.log('Match Created:', newmatch);
     } catch (error) {
-        console.error('Error updating stats:', error);
+        console.error('Error creating match:', error);
     }
 }
 
@@ -178,13 +166,13 @@ async function check() {
         document.getElementById("winlossmsg").textContent="Game won!";
         document.getElementById("wordmsg").textContent="The word was \"" + word +"\""; 
         document.getElementById("numguessmsg").textContent="You found the word in " + guesses.length + " guesses!";
-        await updateUserStats(true, guesses.length);
+        await updateUserStats(word, guesses.length);
         displayEndgamePopup(true);
     }
     else if(guesses.length == 6){
         document.getElementById("winlossmsg").textContent="Game loss!";
         document.getElementById("wordmsg").textContent="The word was " + word;
-        await updateUserStats(false, guesses.length); 
+        await updateUserStats(word, guesses.length); 
         displayEndgamePopup(false);
     }
 
