@@ -21,12 +21,14 @@ CREATE TABLE users (
     pendingfriends TEXT []
 );
 
+
+
 DROP TABLE IF EXISTS versus_active CASCADE;
 CREATE TABLE versus_active (
     usersent TEXT,
     userrecieved TEXT,
     wordleword TEXT,
-    usersent_guesses INTEGER NOT NULL
+    usersent_guesses INTEGER
 );
 
 

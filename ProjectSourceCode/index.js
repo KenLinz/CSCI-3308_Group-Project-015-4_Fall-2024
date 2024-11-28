@@ -26,8 +26,8 @@ const hbs = handlebars.create({
 
 // database configuration
 const dbConfig = {
-    host: process.env.HOST, // the database server ||| RENDER HOST
-    // host: 'db' ||| LOCAL HOST
+    // host: process.env.HOST, // the database server ||| RENDER HOST
+    host: 'db', // ||| LOCAL HOST
     port: 5432, // the database port
     database: process.env.POSTGRES_DB, // the database name
     user: process.env.POSTGRES_USER, // the user account to connect with
@@ -246,9 +246,11 @@ app.get('/profile', async (req, res) => {
 
         // Fetch user data
         const userQuery = 'SELECT * FROM users WHERE username = $1';
-        console.log('Executing user query:', userQuery);
+        const userMatchQuery = 'SELECT * FROM versus_active WHERE userrecieved = $1';
+        console.log('Executing user query:', userMatchQuery);
         const userData = await db.one(userQuery, [req.session.user.username]);
-        console.log('User data result:', userData);
+        const userMatchData = await db.any(userMatchQuery, [req.session.user.username]);
+        console.log('User data result:', userMatchData);
 
         // Fetch user stats
         /*
@@ -268,7 +270,8 @@ app.get('/profile', async (req, res) => {
             wins: userData.wins,
             losses: userData.losses,
             friends: userData.friends,
-            pendingfriends: userData.pendingfriends
+            pendingfriends: userData.pendingfriends,
+            match_usersent: userMatchData
         };
         console.log('Final user object being sent to template:', user);
 
@@ -371,12 +374,12 @@ app.post('/profile/friends', async (req, res) => {
         console.log('ArrayPendingSent: ', AlreadyAddedPendingSent.result);  // Debug line
         console.log('ArrayPendingHas: ', AlreadyAddedPendingHas.result);  // Debug line
 
-        if((AlreadyAddedFriends.result == true)||(AlreadyAddedPendingSent.result == true)||(AlreadyAddedPendingHas.result == true)) {
+        if ((AlreadyAddedFriends.result == true) || (AlreadyAddedPendingSent.result == true) || (AlreadyAddedPendingHas.result == true)) {
             req.session.message = 'Can\'t add a friend, someone you\'ve added, or someone who\'s added you silly!';
             req.session.error = true;
             return res.redirect('/profile');
         }
-        
+
         // Add Friend
         await db.tx(async t => {
             await t.none(
@@ -544,10 +547,10 @@ app.post('/api/updateStats', async (req, res) => {
         const username = req.session.user.username;
         const { gamesPlayed, totalGuesses, wins, losses } = req.body;
 
-         // If it's a win, increment streak; if loss, reset to 0
-         const streakUpdate = wins === 1 ? 
-         'current_streak + 1' : 
-         '0';
+        // If it's a win, increment streak; if loss, reset to 0
+        const streakUpdate = wins === 1 ?
+            'current_streak + 1' :
+            '0';
 
         const query = `
             UPDATE users 
@@ -592,12 +595,85 @@ app.get('/play_singleplayer', (req, res) => {
 
 
 // -------------------------------------  ROUTES for play_multiplayer.hbs   ----------------------------------------------
-app.get('/profile/challenge', (req, res) => {
-    res.render('pages/play_multiplayer', {
-        userrecieved: req.body.userrecieved
-    });
+app.get('/challenge', (req, res) => {
+    res.render('pages/play_multiplayer');
 });
 
+app.post('/challenge', async (req, res) => {
+    const userrecieved = req.body.userrecieved;
+    const usersent = req.session.user.username;
+    const userMatchQuery = 'SELECT * FROM versus_active WHERE userrecieved = $1 AND usersent = $2';
+    const userMatchData = await db.oneOrNone(userMatchQuery, [userrecieved, usersent]);
+    const userMatchData1 = await db.oneOrNone(userMatchQuery, [usersent, userrecieved]);
+    if(userMatchData){
+        res.render('pages/home', {
+            message: "Cannot challenge same player twice until they've responded!",
+            error: true
+        });
+    }
+    else if(userMatchData1){
+        res.render('pages/home', {
+            message: "Cannot challenge same player twice until you've responded!",
+            error: true
+        });
+    }
+    else{
+        res.render('pages/play_multiplayer', { userrecieved });
+    }
+});
+
+app.post('/api/newchallenge', async (req, res) => {
+    try {
+        if (!req.session.user) {
+            return res.redirect('/login');
+        }
+
+        const usersent = req.session.user.username;
+        const { userrecieved, wordleword, usersent_guesses } = req.body;
+
+        const query = 'INSERT INTO versus_active (usersent, userrecieved, wordleword, usersent_guesses) VALUES ($1, $2, $3, $4) returning * ;';
+
+        const result = await db.one(query, [
+            usersent,
+            userrecieved,
+            wordleword,
+            usersent_guesses
+        ]);
+
+        res.json(result);
+    } catch (error) {
+        console.error('Error creating match:', error);
+        res.status(500).json({ error: 'Failed to create match!' });
+    }
+});
+
+app.post('/profile/matchremove', async (req, res) => {
+    try {
+        if (!req.session.user) {
+            return res.redirect('/login');
+        }
+
+        // Finding Input and Current User
+        const usersent = req.body.usersent;
+        const userrecieved = req.session.user.username;
+        console.log("usersent: " + usersent);
+        console.log("userrecieved: " + userrecieved);
+
+        await db.tx(async t => {
+            await t.none(
+                'DELETE FROM versus_active WHERE usersent = $1 AND userrecieved = $2',
+                [usersent, userrecieved]
+            );
+        })
+
+        req.session.message = 'Successfully removed match!';
+        return res.redirect('/profile');
+
+    } catch (error) {
+        console.error('Error removing match', error);
+        res.status(500).send('Error removing match: ' + error.message);
+    }
+});
 // *****************************************************
 // <!-- Section 5 : Start Server-->
 // *****************************************************
