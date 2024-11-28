@@ -36,7 +36,7 @@ CREATE TABLE versus_active (
 DROP TABLE IF EXISTS versus_stats CASCADE;
 CREATE TABLE versus_stats (
     userdata TEXT,
-    useraffected TEXT,
+    userreference TEXT,
     wins INTEGER NOT NULL,
     losses INTEGER NOT NULL,
     ties INTEGER NOT NULL

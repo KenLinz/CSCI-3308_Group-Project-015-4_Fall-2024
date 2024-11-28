@@ -43,6 +43,8 @@ async function generateWord() {
         }
     }
 
+    word = document.getElementById("wordleword").textContent;
+
     console.log("WORD IS: " + word);
 
 }
@@ -64,30 +66,21 @@ function drawGuess(index, char, color) {
 
 async function updateUserStats(word, numGuesses) {
     try {
-        console.log(document.getElementById("userrecieved").textContent);
-        console.log("WORD IS " + word);
+        console.log(document.getElementById("usersent").textContent);
         console.log(numGuesses);
-        const response = await fetch('/api/newchallenge', {
+        const response = await fetch('/api/endchallenge', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                userrecieved: document.getElementById("userrecieved").textContent,
-                wordleword: word,
-                usersent_guesses: numGuesses
+                userrecieved_guesses: numGuesses
             })
         });
 
-        if (!response.ok) {
-            throw new Error('Failed to create match');
-        }
-
-        const newmatch = await response.json();
-
-        console.log('Match Created:', newmatch);
+        console.log('Match Updated');
     } catch (error) {
-        console.error('Error creating match:', error);
+        console.error('Error update match:', error);
     }
 }
 

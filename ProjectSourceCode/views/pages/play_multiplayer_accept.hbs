@@ -1,0 +1,209 @@
+<head>
+    <link rel="stylesheet" href="stylesheet.css">
+    <script type="text/javascript" src="wordlemultiaccept.js"></script>
+    <!-- Bootstrap CSS library -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+      crossorigin="anonymous"
+    />
+    <!-- Bootstrap JS library -->
+    <script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+    crossorigin="anonymous"
+    ></script>
+
+</head>
+<b><div style="margin-left:10px; margin-top:10px; display:inline-block;color:black; border-radius:10px; border:3px solid black; border-style:rounded; background:gray;margin-bottom: 10px;" id={{usersent}}>&nbsp; &nbsp; YOU ARE CHALLENGING {{usersent}} &nbsp; &nbsp;</div></b>
+<div hidden id="usersent">{{usersent}}</div>
+<div hidden id="wordleword">{{wordleword}}</div>
+<body>
+    <div id="popup">
+        <h1>Game Over!!!</h1>
+        <h3 id="winlossmsg">you win/loose</h3>
+        <h3 id="wordmsg">you win/loose</h3>
+        <h3 id="numguessmsg"></h3>
+        
+        <div class="Grid" style="style:grid">
+            <div id ="Row1" class="Row">
+                <div style="display:inline-block; margin-right: 10px;">
+                    <p>Win/loss ratio</p>
+                    <p id="ratio">--</p>
+                </div>
+                <div style="display:inline-block; margin-right: 10px;">
+                    <p>Avg guesses per game</p>
+                    <p id="avgguess">--</p>
+                </div>
+                <div style="display:inline-block; margin-right: 10px;">
+                    <p>Winstreak</p>
+                    <p id="winstreak">--</p>
+                </div>
+            </div>
+        </div>
+        <p>emoji results goes here!</p>
+
+            <div  style="font-family:impact; margin-left:10px;text-align:center">
+                <a style="display:inline-block;color:black; border-radius:10px; border:3px solid black; border-style:rounded; background:gray;margin-bottom: 10px;" class="link" href="/play_singleplayer">play again</a>
+                <a style="display:inline-block;color:black; border-radius:10px; border:3px solid black; border-style:rounded; background:gray;margin-bottom: 10px;" class="link" href="/home">return to home</a>
+            </div>
+
+    </div>
+
+
+
+    <div class="container">
+        <br>
+        {{> message }}
+
+        <div style="text-align:center;">
+            <img src="img.png" width="100" height="100" class="d-inline-block align-top" alt="TEMP_IMG">
+            <h1 style="font-family:impact; text-align:center; margin-top: 10px; color:black;"> Temu Wordle </h1>
+        </div>
+
+
+        <div class="Grid" style="style:grid">
+            {{!-- consider making a css sheet --}}
+            <div id ="Row1" class="Row">
+                <div id="letterbox11" class="letterbox">
+                    <p id="Letter11" style="margin-top: 10px;"></p>
+                </div>
+                <div id="letterbox12" class="letterbox">
+                    <p id="Letter12" style="margin-top: 10px;"></p>
+                </div>
+                <div id="letterbox13" class="letterbox">
+                    <p id="Letter13" style="margin-top: 10px;"></p>
+                </div>
+                <div id="letterbox14" class="letterbox">
+                    <p id="Letter14" style="margin-top: 10px;"></p>
+                </div>
+                <div id="letterbox15" class="letterbox">
+                    <p id="Letter15" style="margin-top: 10px;"></p>
+                </div>
+                <div id="letterbox16" class="letterbox">
+                    <p id="Letter16" style="margin-top: 10px;"></p>
+                </div>
+            </div>
+
+            <div id ="Row2" class="Row">
+                <div id="letterbox21" class="letterbox">
+                    <p id="Letter21" style="margin-top: 10px;"></p>
+                </div>
+                <div id="letterbox22" class="letterbox">
+                    <p id="Letter22" style="margin-top: 10px;"></p>
+                </div>
+                <div id="letterbox23" class="letterbox">
+                    <p id="Letter23" style="margin-top: 10px;"></p>
+                </div>
+                <div id="letterbox24" class="letterbox">
+                    <p id="Letter24" style="margin-top: 10px;"></p>
+                </div>
+                <div id="letterbox25" class="letterbox">
+                    <p id="Letter25" style="margin-top: 10px;"></p>
+                </div>
+                <div id="letterbox26" class="letterbox">
+                    <p id="Letter26" style="margin-top: 10px;"></p>
+                </div>
+            </div>
+
+            <div id="Row3" class="Row">
+                <div id="letterbox31" class="letterbox">
+                    <p id="Letter31" style="margin-top: 10px;"></p>
+                </div>
+                <div id="letterbox32" class="letterbox">
+                    <p id="Letter32" style="margin-top: 10px;"></p>
+                </div>
+                <div id="letterbox33" class="letterbox">
+                    <p id="Letter33" style="margin-top: 10px;"></p>
+                </div>
+                <div id="letterbox34" class="letterbox">
+                    <p id="Letter34" style="margin-top: 10px;"></p>
+                </div>
+                <div id="letterbox35" class="letterbox">
+                    <p id="Letter35" style="margin-top: 10px;"></p>
+                </div>
+                <div id="letterbox36" class="letterbox">
+                    <p id="Letter36" style="margin-top: 10px;"></p>
+                </div>
+            </div>
+
+            <div id="Row4" class="Row">
+                <div id="letterbox41" class="letterbox">
+                    <p id="Letter41" style="margin-top: 10px;"></p>
+                </div>
+                <div id="letterbox42" class="letterbox">
+                    <p id="Letter42" style="margin-top: 10px;"></p>
+                </div>
+                <div id="letterbox43" class="letterbox">
+                    <p id="Letter43" style="margin-top: 10px;"></p>
+                </div>
+                <div id="letterbox44" class="letterbox">
+                    <p id="Letter44" style="margin-top: 10px;"></p>
+                </div>
+                <div id="letterbox45" class="letterbox">
+                    <p id="Letter45" style="margin-top: 10px;"></p>
+                </div>
+                <div id="letterbox46" class="letterbox">
+                    <p id="Letter46" style="margin-top: 10px;"></p>
+                </div>
+            </div>
+
+            <div id="Row5" class="Row">
+                <div id="letterbox51" class="letterbox">
+                    <p id="Letter51" style="margin-top: 10px;"></p>
+                </div>
+                <div id="letterbox52" class="letterbox">
+                    <p id="Letter52" style="margin-top: 10px;"></p>
+                </div>
+                <div id="letterbox53" class="letterbox">
+                    <p id="Letter53" style="margin-top: 10px;"></p>
+                </div>
+                <div id="letterbox54" class="letterbox">
+                    <p id="Letter54" style="margin-top: 10px;"></p>
+                </div>
+                <div id="letterbox55" class="letterbox">
+                    <p id="Letter55" style="margin-top: 10px;"></p>
+                </div>
+                <div id="letterbox56" class="letterbox">
+                    <p id="Letter56" style="margin-top: 10px;"></p>
+                </div>
+            </div>
+
+            <div id="Row6" class="Row">
+                <div id="letterbox61" class="letterbox">
+                    <p id="Letter61" style="margin-top: 10px;"></p>
+                </div>
+                <div id="letterbox62" class="letterbox">
+                    <p id="Letter62" style="margin-top: 10px;"></p>
+                </div>
+                <div id="letterbox63" class="letterbox">
+                    <p id="Letter63" style="margin-top: 10px;"></p>
+                </div>
+                <div id="letterbox64" class="letterbox">
+                    <p id="Letter64" style="margin-top: 10px;"></p>
+                </div>
+                <div id="letterbox65" class="letterbox">
+                    <p id="Letter65" style="margin-top: 10px;"></p>
+                </div>
+                <div id="letterbox66" class="letterbox">
+                    <p id="Letter66" style="margin-top: 10px;"></p>
+                </div>
+            </div>
+
+        </div>
+
+
+        <div style="top-margin:30px;font-family:impact; margin-left:10px;text-align:center;margin-top: 10px;">
+                <div class="form-group" style="width:200px;text-align:center;display:inline-block;">
+                    <input type="text" name="text" id="guess" minlength="6" maxlength="6" size="6" class="form-control" required>
+                </div>
+                <button type="button" class="btn btn-primary" style="border:3px solid black;background-color:gray;border-radius:10px;display:inline-block;" onclick = "check()">Guess!</button>
+        </div>
+
+        <div >
+            <p id="message"></p>
+        </div>
+    </div>
+
+</body>

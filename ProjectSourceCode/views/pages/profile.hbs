@@ -185,11 +185,21 @@
                     <tr class="border-b">
                         <td class="py-3">{{usersent}}</td>
                         <td style="text-align: right;">
+                            <form action="/challengeaccept" method="POST">
+                                <div class="form-group">
+                                    <input type="hidden" name="usersent" id="usersent" class="form-control"
+                                        style="display:block;" value="{{usersent}}">
+                                </div>
 
-                            <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-                                style="background: green; margin-bottom:10px;">
-                                Accept
-                            </button>
+                                <div class="form-group">
+                                    <input type="hidden" name="wordleword" id="wordleword" class="form-control"
+                                        style="display:block;" value="{{wordleword}}">
+                                </div>
+
+                                <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+                                    style="background: green; margin-bottom:10px;">
+                                    Accept
+                                </button>
                             </form>
                         </td>
                         <td style="text-align: left;">
@@ -211,6 +221,40 @@
             </table>
             {{else}}
             <p class="text-gray-600 text-center">No matches added yet</p>
+            {{/if}}
+        </div>
+    </div>
+    <br />
+    <br />
+    {{!-- Matches Stats Section --}}
+    <div class="mb-8"
+        style="color:black; border-radius:10px; border:3px solid black; border-style:rounded; background:lightgray; padding-top:10px;">
+        <h2 class="text-2xl font-bold mb-4" style="text-align: center;">Match Statistics</h2>
+        <div class="overflow-x-auto">
+            {{#if user.match_stats}}
+            <table class="table"
+                style="border:3px solid black; padding-top:10px; width:80%; margin: 0 auto; margin-bottom:20px;">
+                <thead class="border-b-2">
+                    <tr>
+                        <th class="text-left py-2">Username</th>
+                        <th class="text-left py-2">Wins</th>
+                        <th class="text-left py-2">Ties</th>
+                        <th class="text-left py-2">Losses</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each user.match_stats}}
+                    <tr class="border-b">
+                        <td class="py-3">{{userreference}}</td>
+                        <td class="py-3">{{wins}}</td>
+                        <td class="py-3">{{ties}}</td>
+                        <td class="py-3">{{losses}}</td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+            {{else}}
+            <p class="text-gray-600 text-center">No match stats added yet</p>
             {{/if}}
         </div>
     </div>
