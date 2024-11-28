@@ -328,6 +328,7 @@ app.post('/profile/settings', async (req, res) => {
             req.session.user.password = hashedPassword;
         }
 
+        req.session.message = 'Successfully changed password!';
         res.redirect('/profile');
     } catch (error) {
         console.error('Error updating profile:', error);
@@ -586,6 +587,14 @@ app.get('/logout', (req, res) => {
 app.get('/play_singleplayer', (req, res) => {
     res.render('pages/play_singleplayer', {
         message: undefined,
+    });
+});
+
+
+// -------------------------------------  ROUTES for play_multiplayer.hbs   ----------------------------------------------
+app.get('/profile/challenge', (req, res) => {
+    res.render('pages/play_multiplayer', {
+        userrecieved: req.body.userrecieved
     });
 });
 
