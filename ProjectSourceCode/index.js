@@ -12,6 +12,7 @@ const bodyParser = require('body-parser');
 const session = require('express-session'); // To set the session object. To store or access session data, use the `req.session`, which is (generally) serialized as JSON by the store.
 const bcrypt = require('bcryptjs'); //  To hash passwords
 const axios = require('axios'); // To make HTTP requests from our server. We'll learn more about it in Part C.
+const { stat } = require('fs');
 
 // *****************************************************
 // <!-- Section 2 : Connect to DB -->
@@ -26,8 +27,8 @@ const hbs = handlebars.create({
 
 // database configuration
 const dbConfig = {
-    // host: process.env.HOST, // the database server ||| RENDER HOST
-    host: 'db', // ||| LOCAL HOST
+    host: process.env.HOST, // the database server ||| RENDER HOST
+    // host: 'db', // ||| LOCAL HOST
     port: 5432, // the database port
     database: process.env.POSTGRES_DB, // the database name
     user: process.env.POSTGRES_USER, // the user account to connect with
@@ -247,10 +248,12 @@ app.get('/profile', async (req, res) => {
         // Fetch user data
         const userQuery = 'SELECT * FROM users WHERE username = $1';
         const userMatchQuery = 'SELECT * FROM versus_active WHERE userrecieved = $1';
+        const userMatchStatsQuery = 'SELECT * FROM versus_stats WHERE userdata = $1';
         console.log('Executing user query:', userMatchQuery);
         const userData = await db.one(userQuery, [req.session.user.username]);
         const userMatchData = await db.any(userMatchQuery, [req.session.user.username]);
-        console.log('User data result:', userMatchData);
+        const userMatchStats = await db.any(userMatchStatsQuery, [req.session.user.username]);
+        console.log('User data result:', userMatchStats);
 
         // Fetch user stats
         /*
@@ -271,7 +274,8 @@ app.get('/profile', async (req, res) => {
             losses: userData.losses,
             friends: userData.friends,
             pendingfriends: userData.pendingfriends,
-            match_usersent: userMatchData
+            match_usersent: userMatchData,
+            match_stats: userMatchStats
         };
         console.log('Final user object being sent to template:', user);
 
@@ -478,6 +482,14 @@ app.post('/profile/acceptrequest', async (req, res) => {
                 'UPDATE users SET friends = ARRAY_APPEND(friends, $2) WHERE username = $1',
                 [friendsusername, currentUsername]
             );
+            await t.none(
+                'INSERT INTO versus_stats (userdata, userreference, wins, losses, ties) VALUES ($1, $2, 0, 0, 0); ',
+                [friendsusername, currentUsername]
+            );
+            await t.none(
+                'INSERT INTO versus_stats (userdata, userreference, wins, losses, ties) VALUES ($2, $1, 0, 0, 0); ',
+                [friendsusername, currentUsername]
+            );
         })
 
         req.session.message = 'Successfully accepted user as a friend!';
@@ -674,6 +686,81 @@ app.post('/profile/matchremove', async (req, res) => {
         res.status(500).send('Error removing match: ' + error.message);
     }
 });
+
+app.get('/challengeaccept', (req, res) => {
+    res.render('pages/play_multiplayer_accept');
+});
+
+app.post('/challengeaccept', async (req, res) => {
+    const usersent = req.body.usersent;
+    const userrecieved = req.session.user.username;
+    const wordleword = req.body.wordleword;
+    console.log("SENT SENT SENT SENT SENT: " + usersent);
+    console.log("WORD IS WORD IS WORD IS WORD IS WORD IS WORD: " + wordleword);
+    res.render('pages/play_multiplayer_accept', { usersent, wordleword });
+});
+
+app.post('/api/endchallenge', async (req, res) => {
+    try {
+        if (!req.session.user) {
+            return res.redirect('/login');
+        }
+
+        const { userrecieved_guesses } = req.body;
+        const userrecieved = req.session.user.username;
+
+        const query = 'SELECT * FROM versus_active where userrecieved = $1';
+
+        const result = await db.one(query, [
+            userrecieved
+        ]);
+    
+        const usersent = result.usersent;
+        const usersent_guesses = result.usersent_guesses;
+        console.log("RESULT: " + JSON.stringify(result));
+        console.log("USER RECIEVED: " + userrecieved);
+        console.log("USER REC GUESSES: " + userrecieved_guesses);
+        console.log("USER SENT: " + usersent);
+        console.log("USER SENT GUESSES: " + usersent_guesses);
+
+        const WinQuery = 'UPDATE versus_stats SET wins = wins + 1 WHERE userdata = $1 AND userreference = $2';
+        const LossQuery = 'UPDATE versus_stats SET losses = losses + 1 WHERE userdata = $1 AND userreference = $2';
+        const TieQuery = 'UPDATE versus_stats SET ties = ties + 1 WHERE userdata = $1 AND userreference = $2';
+
+        if (userrecieved_guesses > usersent_guesses) {
+            await db.any(LossQuery, [userrecieved, usersent]);
+            await db.any(WinQuery, [usersent, userrecieved]);
+        }
+        else if (userrecieved_guesses < usersent_guesses) {
+            await db.any(WinQuery, [userrecieved, usersent]);
+            await db.any(LossQuery, [usersent, userrecieved]);
+        }
+        else if (userrecieved_guesses == result.usersent_guesses) {
+            await db.any(TieQuery, [userrecieved, usersent]);
+            await db.any(TieQuery, [usersent, userrecieved]);
+        }
+
+        await db.tx(async t => {
+            await t.none(
+                'DELETE FROM versus_active WHERE usersent = $1 AND userrecieved = $2',
+                [usersent, userrecieved]
+            );
+
+            await t.none(
+                'DELETE FROM versus_active WHERE usersent = $2 AND userrecieved = $1',
+                [result.usersent, userrecieved]
+            );
+        })
+
+        req.session.message = 'Successfully finalized match!';
+        return res.redirect('/profile');
+
+    } catch (error) {
+        console.error('Error finalizing match:', error);
+        res.status(500).json({ error: 'Failed to create match!' });
+    }
+});
+
 // *****************************************************
 // <!-- Section 5 : Start Server-->
 // *****************************************************
