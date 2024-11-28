@@ -117,11 +117,19 @@
                     {{#each user.friends}}
                     <tr class="border-b">
                         <td class="py-3 text-left"><b>User: </b>{{this}}</td>
-                        <td style="text-align: right;"><button type="submit"
-                                class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-                                style="background: orange; margin-bottom:10px;">
-                                Challenge
-                            </button></td>
+                        <td style="text-align: right;">
+                            <form action="/profile/challenge" method="GET">
+                                <div class="form-group">
+                                    <input type="hidden" name="userrecieved" id="userrecieved" class="form-control"
+                                        style="display:block;" value="{{this}}">
+                                </div>
+
+                                <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+                                    style="background: orange; margin-bottom:10px;">
+                                    Challenge
+                                </button>
+                            </form>
+                        </td>
                         <td style="text-align: left;">
                             <form action="/profile/remove" method="POST">
                                 <div class="form-group">
@@ -133,7 +141,7 @@
                                     style="background: red; margin-bottom:10px;">
                                     Remove
                                 </button>
-                        </form>
+                            </form>
                         </td>
 
                     </tr>
