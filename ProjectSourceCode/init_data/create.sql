@@ -21,26 +21,21 @@ CREATE TABLE users (
     pendingfriends TEXT []
 );
 
-/*
--- Stats table (one-to-many relationship with users)
-DROP TABLE IF EXISTS user_stats;
-CREATE TABLE user_stats (
-    stat_id SERIAL PRIMARY KEY,
-    username VARCHAR(50) REFERENCES users(username),
-    stat_type VARCHAR(50) NOT NULL,  -- e.g., 'games_played', 'wins', 'losses', 'average_guesses'
-    stat_value INTEGER NOT NULL,
-    UNIQUE(username, stat_type)
+DROP TABLE IF EXISTS versus_active CASCADE;
+CREATE TABLE versus_active (
+    usersent TEXT,
+    userrecieved TEXT,
+    wordleword TEXT,
+    usersent_guesses INTEGER NOT NULL
 );
-*/
 
-/*
--- Friends table (many-to-many relationship)
-DROP TABLE IF EXISTS friends;
-CREATE TABLE friends (
-    friendship_id SERIAL PRIMARY KEY,
-    user_recieved VARCHAR(50) REFERENCES users(username),
-    user_sent VARCHAR(50) REFERENCES users(username),
-    status VARCHAR(20) NOT NULL DEFAULT 'pending', -- 'pending', 'accepted', 'rejected'
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+
+
+DROP TABLE IF EXISTS versus_stats CASCADE;
+CREATE TABLE versus_stats (
+    userdata TEXT,
+    useraffected TEXT,
+    wins INTEGER NOT NULL,
+    losses INTEGER NOT NULL,
+    ties INTEGER NOT NULL
 );
-*/
