@@ -1,47 +1,49 @@
 // const { urlencoded } = require("body-parser");
 
+const { off } = require("../..");
+
 let guesses = [];
 let word = undefined;
 
 async function generateWord() {
     temp = "";
     //get random 6 letter words until dictionary recognizes it as a real word
-    while(true){
-        let testWord = await fetch('https://random-word-api.herokuapp.com/word?length=6')
-        .then(response => response.json())
-        .then(function (data) {
-            const testWord = data[0];
-            return data[0];
-        });
-        dictionaryUrl = "https://api.dictionaryapi.dev/api/v2/entries/en/" + testWord;
-        let isValid = await fetch(dictionaryUrl) 
-        .then(response => {
-            if (!response.ok) {
-                document.getElementById("message").textContent="looking for valid word, delete this message later";
-                throw new Error('Network response was not ok');
-                return false;
-            }
-        })
-        .then(data => {
-            wordExists = true;
-            document.getElementById("message").textContent="";
-            console.log(wordExists);
-            return true;
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            return false;
-        });
+    // while(true){
+    //     let testWord = await fetch('https://random-word-api.herokuapp.com/word?length=6')
+    //     .then(response => response.json())
+    //     .then(function (data) {
+    //         const testWord = data[0];
+    //         return data[0];
+    //     });
+    //     dictionaryUrl = "https://api.dictionaryapi.dev/api/v2/entries/en/" + testWord;
+    //     let isValid = await fetch(dictionaryUrl) 
+    //     .then(response => {
+    //         if (!response.ok) {
+    //             document.getElementById("message").textContent="looking for valid word, delete this message later";
+    //             throw new Error('Network response was not ok');
+    //             return false;
+    //         }
+    //     })
+    //     .then(data => {
+    //         wordExists = true;
+    //         document.getElementById("message").textContent="";
+    //         console.log(wordExists);
+    //         return true;
+    //     })
+    //     .catch(error => {
+    //         console.error('Error:', error);
+    //         return false;
+    //     });
     
-        // console.log("picked word " + testWord);
-        // console.log("is valid? " + isValid);
+    //     // console.log("picked word " + testWord);
+    //     // console.log("is valid? " + isValid);
         
-        await new Promise((resolve, reject) => setTimeout(resolve, 100));
-        word = testWord;
-        if (isValid == true){
-            break;
-        }
-    }
+    //     await new Promise((resolve, reject) => setTimeout(resolve, 100));
+    //     word = testWord;
+    //     if (isValid == true){
+    //         break;
+    //     }
+    // }
 
     word = document.getElementById("wordleword").textContent;
 
@@ -81,6 +83,7 @@ async function updateUserStats(word, numGuesses) {
         console.log('Match Updated');
     } catch (error) {
         console.error('Error update match:', error);
+        document.getElementById("winlossmsg").textContent="an error has occured with update match"; 
     }
 }
 
@@ -156,9 +159,25 @@ async function check() {
 
     //add more stuff to win and loss states eventually!
     if(matchCount == 6){
-        document.getElementById("winlossmsg").textContent="Game won!";
+
         document.getElementById("wordmsg").textContent="The word was \"" + word +"\""; 
-        document.getElementById("numguessmsg").textContent="You found the word in " + guesses.length + " guesses!";
+        document.getElementById("youstats").textContent="You found the word in " + guesses.length + " guesses!";
+        document.getElementById("theirstats").textContent="they found the word in " + guesses.length + " guesses!";
+
+        console.log(document.getElementById("usersent_guesses").textContent);
+        opGuess = parseInt(document.getElementById("usersent_guesses").textContent);
+        
+        if(oppGuess > guesses.length){
+            document.getElementById("winlossmsg").textContent="You loose!";
+        }
+        else if(oppGuess < guesses.length){
+            document.getElementById("winlossmsg").textContent="You win!";
+        }
+        else if(oppGuess == guesses.length){
+            document.getElementById("winlossmsg").textContent="You tied!";
+        }
+    
+        
         await updateUserStats(word, guesses.length);
         displayEndgamePopup(true);
     }
