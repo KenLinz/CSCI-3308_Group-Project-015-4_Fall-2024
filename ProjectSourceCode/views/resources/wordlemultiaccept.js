@@ -158,11 +158,12 @@ async function check() {
     console.log(matchCount);
 
     //add more stuff to win and loss states eventually!
-    if(matchCount == 6){
+    if(matchCount == 6 | guesses.length == 6){
 
         document.getElementById("wordmsg").textContent="The word was \"" + word +"\""; 
         document.getElementById("youstats").textContent="You found the word in " + guesses.length + " guesses!";
-        document.getElementById("theirstats").textContent="they found the word in " + guesses.length + " guesses!";
+        document.getElementById("theirstats").textContent= document.getElementById("usersent").textContent + 
+            "found the word in " + document.getElementById("usersent_guesses").textContent + " guesses!";
 
         console.log(document.getElementById("usersent_guesses").textContent);
         opGuess = parseInt(document.getElementById("usersent_guesses").textContent);
@@ -181,12 +182,12 @@ async function check() {
         await updateUserStats(word, guesses.length);
         displayEndgamePopup(true);
     }
-    else if(guesses.length == 6){
-        document.getElementById("winlossmsg").textContent="Game loss!";
-        document.getElementById("wordmsg").textContent="The word was " + word;
-        await updateUserStats(word, guesses.length); 
-        displayEndgamePopup(false);
-    }
+    // else if(guesses.length == 6){
+    //     document.getElementById("winlossmsg").textContent="Game loss!";
+    //     document.getElementById("wordmsg").textContent="The word was " + word;
+    //     await updateUserStats(word, guesses.length); 
+    //     displayEndgamePopup(false);
+    // }
 
     return;
 }
