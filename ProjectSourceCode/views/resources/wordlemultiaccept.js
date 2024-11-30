@@ -135,13 +135,13 @@ async function check() {
             while (n <= w.length) {
                 if (g[i] == w[n]) {
                     c++;
-                    dupdix = n;
+                    dupidx = n;
                 }
                 n++;
             }
-            
-            if(dupdix != null){
-                w.splice(dupdix, 1);
+
+            if(dupidx != null){
+                w.splice(dupidx, 1);
             }
 
             if (c == 0) {
