@@ -43,6 +43,9 @@ async function generateWord() {
         }
     }
 
+    document.getElementById("game").style.visibility = "visible";
+    document.getElementById("loading").style.visibility = "hidden";
+
     console.log("WORD IS: " + word);
 
 }

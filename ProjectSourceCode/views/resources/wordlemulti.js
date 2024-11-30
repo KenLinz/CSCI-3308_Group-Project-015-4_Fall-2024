@@ -35,6 +35,7 @@ async function generateWord() {
     
         // console.log("picked word " + testWord);
         // console.log("is valid? " + isValid);
+
         
         await new Promise((resolve, reject) => setTimeout(resolve, 100));
         word = testWord;
@@ -42,6 +43,9 @@ async function generateWord() {
             break;
         }
     }
+
+    document.getElementById("game").style.visibility = "visible";
+    document.getElementById("loading").style.visibility = "hidden";
 
     console.log("WORD IS: " + word);
 

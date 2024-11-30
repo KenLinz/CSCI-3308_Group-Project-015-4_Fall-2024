@@ -45,6 +45,8 @@ async function generateWord() {
     //     }
     // }
 
+
+    
     word = document.getElementById("wordleword").textContent;
 
     console.log("WORD IS: " + word);
