@@ -14,7 +14,7 @@
 }
 
 #popup{
-    visibility: hidden;
+    /* visibility: hidden; */
     width: 400px;
     /* background-color:rgba(50, 50, 50 / %); */
     /* background: white;
