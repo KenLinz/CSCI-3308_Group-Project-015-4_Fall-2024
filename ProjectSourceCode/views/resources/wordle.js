@@ -156,7 +156,10 @@ async function check() {
                 }
                 n++;
             }
-            w.splice(dupdix, 1);
+            if(dupdix != null){
+                w.splice(dupdix, 1);
+            }
+            
             console.log(w);
 
             if (c == 0) {

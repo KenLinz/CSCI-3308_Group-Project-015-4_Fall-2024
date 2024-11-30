@@ -131,12 +131,19 @@ async function check() {
         } else {
             let n = 0;
             let c = 0;
-            while (n <= 5) {
-            if (g[i] == w[n]) {
-                c++;
+            dupidx = null;
+            while (n <= w.length) {
+                if (g[i] == w[n]) {
+                    c++;
+                    dupdix = n;
+                }
+                n++;
             }
-            n++;
+            
+            if(dupdix != null){
+                w.splice(dupdix, 1);
             }
+
             if (c == 0) {
             //make red
             drawGuess(i + 1, g[i], "red");
