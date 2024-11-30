@@ -13,6 +13,28 @@
     display:inline-block;
 }
 
+#message{
+    text-align:center;
+    font-family:impact;
+    margin-top: 10px;
+}
+
+#loading{
+    /* background-color: rgb(0 0 0 / 0.9);
+    color: white; */
+    border-radius: 6px;
+    position: absolute;
+    top: 25%;
+    left: 25%;
+    right: 25%;
+    /*transform: translate(-50%, -50%); */
+    text-align: center;
+}
+
+#game{
+    visibility: hidden; 
+}
+
 #popup{
     visibility: hidden;
     width: 400px;
