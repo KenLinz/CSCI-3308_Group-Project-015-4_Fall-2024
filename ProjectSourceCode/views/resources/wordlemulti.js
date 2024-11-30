@@ -140,19 +140,20 @@ async function check() {
         } else {
             let n = 0;
             let c = 0;
-            while (n <= 5) {
-                dupidx = null;
-                while (n <= w.length) {
-                    if (g[i] == w[n]) {
-                        c++;
-                        dupidx = n;
-                    }
-                    n++;
+            dupidx = null;
+            while (n <= w.length) {
+                if (g[i] == w[n]) {
+                    c++;
+                    dupidx = n;
                 }
+                n++;
+            }
             if(dupidx != null){
                 w.splice(dupidx, 1);
             }
             
+            console.log(w);
+
             if (c == 0) {
             //make red
             drawGuess(i + 1, g[i], "red");
@@ -165,8 +166,7 @@ async function check() {
         guesses.push(guess);
         console.log(guesses);
 
-        return mtchCnt;
-    }})
+        return mtchCnt;})
     .catch(error => {
         console.error('Error:', error);
         return 0;
@@ -191,7 +191,8 @@ async function check() {
     else if(guesses.length == 6){
         document.getElementById("winlossmsg").textContent="Game loss!";
         document.getElementById("wordmsg").textContent="The word was " + word;
-        await updateUserStats(word, guesses.length); 
+        //note: if you loose its set to 7 to indicate to multiaccept that this player couldnt guess the word
+        await updateUserStats(word, guesses.length + 1); 
         displayEndgamePopup(false);
     }
 

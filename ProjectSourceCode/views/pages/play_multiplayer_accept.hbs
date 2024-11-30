@@ -20,24 +20,33 @@
 <div hidden id="usersent">{{usersent}}</div>
 <div hidden id="wordleword">{{wordleword}}</div>
 <div hidden id="usersent_guesses">{{usersent_guesses}}</div>
+{{!-- <div hidden id="usersent">test</div>
+<div hidden id="wordleword">bagels</div>
+<div hidden id="usersent_guesses">3</div> --}}
 <body>
     
+    <div id="loading">
+        <h3>getting word...</h3>
+        <img src="https://media.tenor.com/_62bXB8gnzoAAAAj/loading.gif" alt="loading">
+    </div>
+
+
+    <div id="game">
+
     <div id="popup">
         <h1>Game Over!!!</h1>
 
         <h3 id="wordmsg">word was</h3>
         <h3 id="numguessmsg"></h3>
         
-        <div class="Grid" style="style:grid">
-            <div id ="Row1" class="Row">
-                <div style="display:inline-block; margin-right: 10px;">
-                    <p id="youstats">you found word in __ guesses</p>
-                </div>
-                <div style="display:inline-block; margin-right: 10px;">
-                    <p id="theirstats">they found word in __ guesses</p>
-                </div>
-            </div>
+
+        <div style="display:inline-block; margin-right: 10px;">
+            <p id="youstats">you found word in __ guesses</p>
         </div>
+        <div style="display:inline-block; margin-right: 10px;">
+            <p id="theirstats">they found word in __ guesses</p>
+        </div>
+
 
         <h3 id="winlossmsg">you win/loose</h3>
 
@@ -216,6 +225,7 @@
         <div >
             <p id="message"></p>
         </div>
+    </div>
     </div>
 
 </body>
