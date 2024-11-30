@@ -4,44 +4,44 @@ let guesses = [];
 let word = undefined;
 
 async function generateWord() {
-    temp = "";
-    //get random 6 letter words until dictionary recognizes it as a real word
-    while(true){
-        let testWord = await fetch('https://random-word-api.herokuapp.com/word?length=6')
-        .then(response => response.json())
-        .then(function (data) {
-            const testWord = data[0];
-            return data[0];
-        });
-        dictionaryUrl = "https://api.dictionaryapi.dev/api/v2/entries/en/" + testWord;
-        let isValid = await fetch(dictionaryUrl) 
-        .then(response => {
-            if (!response.ok) {
-                document.getElementById("message").textContent="looking for valid word, delete this message later";
-                throw new Error('Network response was not ok');
-                return false;
-            }
-        })
-        .then(data => {
-            wordExists = true;
-            document.getElementById("message").textContent="";
-            console.log(wordExists);
-            return true;
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            return false;
-        });
+    // temp = "";
+    // //get random 6 letter words until dictionary recognizes it as a real word
+    // while(true){
+    //     let testWord = await fetch('https://random-word-api.herokuapp.com/word?length=6')
+    //     .then(response => response.json())
+    //     .then(function (data) {
+    //         const testWord = data[0];
+    //         return data[0];
+    //     });
+    //     dictionaryUrl = "https://api.dictionaryapi.dev/api/v2/entries/en/" + testWord;
+    //     let isValid = await fetch(dictionaryUrl) 
+    //     .then(response => {
+    //         if (!response.ok) {
+    //             document.getElementById("message").textContent="looking for valid word, delete this message later";
+    //             throw new Error('Network response was not ok');
+    //             return false;
+    //         }
+    //     })
+    //     .then(data => {
+    //         wordExists = true;
+    //         document.getElementById("message").textContent="";
+    //         console.log(wordExists);
+    //         return true;
+    //     })
+    //     .catch(error => {
+    //         console.error('Error:', error);
+    //         return false;
+    //     });
     
-        // console.log("picked word " + testWord);
-        // console.log("is valid? " + isValid);
+    //     // console.log("picked word " + testWord);
+    //     // console.log("is valid? " + isValid);
         
-        await new Promise((resolve, reject) => setTimeout(resolve, 100));
-        word = testWord;
-        if (isValid == true){
-            break;
-        }
-    }
+    //     await new Promise((resolve, reject) => setTimeout(resolve, 100));
+    //     word = testWord;
+    //     if (isValid == true){
+    //         break;
+    //     }
+    // }
 
     word = document.getElementById("wordleword").textContent;
 
