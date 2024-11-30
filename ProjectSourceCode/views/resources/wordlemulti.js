@@ -67,6 +67,7 @@ async function updateUserStats(word, numGuesses) {
         console.log(document.getElementById("userrecieved").textContent);
         console.log("WORD IS " + word);
         console.log(numGuesses);
+        document.getElementById("note").textContent= "Your challenge has been sent to " + document.getElementById("userrecieved").textContent + "!";
         const response = await fetch('/api/newchallenge', {
             method: 'POST',
             headers: {
@@ -75,12 +76,13 @@ async function updateUserStats(word, numGuesses) {
             body: JSON.stringify({
                 userrecieved: document.getElementById("userrecieved").textContent,
                 wordleword: word,
-                usersent_guesses: numGuesses
+                usersent_guesses: numGuesses, 
             })
         });
 
         if (!response.ok) {
             throw new Error('Failed to create match');
+            document.getElementById("note").textContent= "An error has occurred, failed to create match!";
         }
 
         const newmatch = await response.json();
@@ -88,6 +90,7 @@ async function updateUserStats(word, numGuesses) {
         console.log('Match Created:', newmatch);
     } catch (error) {
         console.error('Error creating match:', error);
+        document.getElementById("note").textContent=  "An error has occurred, failed to create match!";
     }
 }
 
@@ -163,9 +166,14 @@ async function check() {
 
     //add more stuff to win and loss states eventually!
     if(matchCount == 6){
-        document.getElementById("winlossmsg").textContent="Game won!";
+        if(guesses.length == 1){
+            document.getElementById("numguessmsg").textContent="You found the word in " + guesses.length + " guess!";
+        }
+        else{
+            document.getElementById("numguessmsg").textContent="You found the word in " + guesses.length + " guesses!";
+        }
         document.getElementById("wordmsg").textContent="The word was \"" + word +"\""; 
-        document.getElementById("numguessmsg").textContent="You found the word in " + guesses.length + " guesses!";
+        
         await updateUserStats(word, guesses.length);
         displayEndgamePopup(true);
     }

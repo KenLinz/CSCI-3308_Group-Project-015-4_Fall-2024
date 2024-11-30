@@ -611,12 +611,17 @@ app.get('/challenge', (req, res) => {
     res.render('pages/play_multiplayer');
 });
 
+
 app.post('/challenge', async (req, res) => {
     const userrecieved = req.body.userrecieved;
     const usersent = req.session.user.username;
     const userMatchQuery = 'SELECT * FROM versus_active WHERE userrecieved = $1 AND usersent = $2';
     const userMatchData = await db.oneOrNone(userMatchQuery, [userrecieved, usersent]);
     const userMatchData1 = await db.oneOrNone(userMatchQuery, [usersent, userrecieved]);
+
+    testMatchdata = userMatchData;
+    testMatchdata1 = userMatchData1;
+
     if(userMatchData){
         res.render('pages/home', {
             message: "Cannot challenge same player twice until they've responded!",
