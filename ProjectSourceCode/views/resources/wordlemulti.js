@@ -6,44 +6,44 @@ async function generateWord() {
     temp = "";
     //get random 6 letter words until dictionary recognizes it as a real word
     //uncomment when api works again
-    // while(true){
-    //     let testWord = await fetch('https://random-word-api.herokuapp.com/word?length=6')
-    //     .then(response => response.json())
-    //     .then(function (data) {
-    //         const testWord = data[0];
-    //         return data[0];
-    //     });
-    //     dictionaryUrl = "https://api.dictionaryapi.dev/api/v2/entries/en/" + testWord;
-    //     let isValid = await fetch(dictionaryUrl) 
-    //     .then(response => {
-    //         if (!response.ok) {
-    //             document.getElementById("message").textContent="looking for valid word, delete this message later";
-    //             throw new Error('Network response was not ok');
-    //             return false;
-    //         }
-    //     })
-    //     .then(data => {
-    //         wordExists = true;
-    //         document.getElementById("message").textContent="";
-    //         return true;
-    //     })
-    //     .catch(error => {
-    //         console.error('Error:', error);
-    //         return false;
-    //     });
-    //     await new Promise((resolve, reject) => setTimeout(resolve, 100));
-    //     word = testWord;
-    //     if (isValid == true){
-    //         break;
-    //     }
-    // }
+    while(true){
+        let testWord = await fetch('https://random-word-api.herokuapp.com/word?length=6')
+        .then(response => response.json())
+        .then(function (data) {
+            const testWord = data[0];
+            return data[0];
+        });
+        dictionaryUrl = "https://api.dictionaryapi.dev/api/v2/entries/en/" + testWord;
+        let isValid = await fetch(dictionaryUrl) 
+        .then(response => {
+            if (!response.ok) {
+                document.getElementById("message").textContent="looking for valid word, delete this message later";
+                throw new Error('Network response was not ok');
+                return false;
+            }
+        })
+        .then(data => {
+            wordExists = true;
+            document.getElementById("message").textContent="";
+            return true;
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            return false;
+        });
+        await new Promise((resolve, reject) => setTimeout(resolve, 100));
+        word = testWord;
+        if (isValid == true){
+            break;
+        }
+    }
     
     await new Promise((resolve, reject) => setTimeout(resolve, 2));
 
     document.getElementById("game").style.visibility = "visible";
     document.getElementById("loading").style.visibility = "hidden";
 
-    word = many_words[Math.floor(Math.random() * 1000)];
+    // word = many_words[Math.floor(Math.random() * 1000)];
 
     // console.log("WORD IS: " + word);
 
