@@ -1,20 +1,20 @@
 <div class="container">
-  <table class="table" style="font-family:impact; background-color: rgba(0, 0, 0, 0.0); border-color: black; border-style: solid;">
+  {{#if leaderboard}}
+  {{#each leaderboard}}
+  <table class="table" style="background-color: rgba(0, 0, 0, 0.0); border-color: black; border-style: solid; color:black; border-radius:10px; border:3px solid black; border-style:rounded; background:lightgray; padding-top:10px; margin-top: 10px; margin-bottom: 10px; padding-bottom: 10px;">
     <tr style="background-color: rgba(0, 0, 0, 0.0)">
-      <th style="background-color: rgba(0, 0, 0, 0.0)">Player</th>
+      <th style="background-color: rgba(0, 0, 0, 0.0)">Username</th>
       <th style="background-color: rgba(0, 0, 0, 0.0)">Wins</th>
     </tr>
     <tr style="background-color: rgba(0, 0, 0, 0.0)">
-      <td style="background-color: rgba(0, 0, 0, 0.0)" id="player-1">wordle_legend_12345</td>
-      <td style="background-color: rgba(0, 0, 0, 0.0)" id="score-1">17</td>
-    </tr>
-    <tr style="background-color: rgba(0, 0, 0, 0.0)">
-      <td style="background-color: rgba(0, 0, 0, 0.0)" id="player-2">Joe Testuser</td>
-      <td style="background-color: rgba(0, 0, 0, 0.0)" id="score-2">11</td>
-    </tr>
-    <tr style="background-color: rgba(0, 0, 0, 0.0)">
-      <td style="background-color: rgba(0, 0, 0, 0.0)" id="player-3">timmy</td>
-      <td style="background-color: rgba(0, 0, 0, 0.0)" id="score-3">2</td>
+      <td style="background-color: rgba(0, 0, 0, 0.0)">{{this.username}}</td>
+      <td style="background-color: rgba(0, 0, 0, 0.0)">{{this.wins}}</td>
     </tr>
   </table>
+  {{/each}}
+  {{else}}
+  <div class="text-center" style="color:black; border-radius:10px; border:3px solid black; border-style:rounded; background:lightgray; padding-top:10px; margin-top: 10px; margin-bottom: 10px; padding-bottom: 10px;">
+    Nobody has any wins to display! Try playing a couple games!
+  </div>
+  {{/if}}
 </div>
