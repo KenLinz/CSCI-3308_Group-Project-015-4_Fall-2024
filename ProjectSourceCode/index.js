@@ -227,10 +227,39 @@ const auth = (req, res, next) => {
 app.use(auth);
 
 // -------------------------------------  ROUTES for HOME(?).hbs   ----------------------------------------------
-app.get('/home', (req, res) => {
-    res.render('pages/home', {
-        message: undefined,
-    });
+app.get('/home', async (req, res) => {
+    try {
+        const LBQuery = 'SELECT * FROM users ORDER BY wins DESC';
+        const LBData = await db.any(LBQuery);
+        LBLength = LBData.length;
+        console.log("LENGTH OF LEADERBOARD QUERY IS " + LBLength);
+        leaderboard = [];
+
+        if (LBLength > 10) { LBLength = 10 };
+
+        for (let i = 0; i < LBLength; i++) {
+
+            LBObject = {
+                username: LBData[i].username,
+                wins: LBData[i].wins
+            };
+
+            if (LBObject.wins > 0) {
+                leaderboard.push(LBObject);
+                console.log("ADDING USERNAME: " + LBObject.username);
+                console.log("ADDING WINS: " + LBObject.wins);
+            }
+        }
+
+        const message = req.session.message;
+        const error = req.session.error;
+        req.session.message = req.session.error = null;
+
+        res.render('pages/home', { leaderboard, message, error });
+    } catch (error) {
+        console.error('Error in home route:', error);
+        res.status(500).send('Server error');
+    }
 });
 
 // -------------------------------------  ROUTES for PROFILE.hbs   ----------------------------------------------
@@ -622,19 +651,19 @@ app.post('/challenge', async (req, res) => {
     testMatchdata = userMatchData;
     testMatchdata1 = userMatchData1;
 
-    if(userMatchData){
+    if (userMatchData) {
         res.render('pages/home', {
             message: "Cannot challenge same player twice until they've responded!",
             error: true
         });
     }
-    else if(userMatchData1){
+    else if (userMatchData1) {
         res.render('pages/home', {
             message: "Cannot challenge same player twice until you've responded!",
             error: true
         });
     }
-    else{
+    else {
         res.render('pages/play_multiplayer', { userrecieved });
     }
 });
@@ -719,7 +748,7 @@ app.post('/api/endchallenge', async (req, res) => {
         const result = await db.one(query, [
             userrecieved
         ]);
-    
+
         const usersent = result.usersent;
         const usersent_guesses = result.usersent_guesses;
         console.log("RESULT: " + JSON.stringify(result));
