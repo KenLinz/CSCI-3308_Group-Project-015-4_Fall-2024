@@ -42,6 +42,16 @@ async function generateWord() {
     word = "inbred";
     // console.log("WORD IS: " + word);
 
+    // Auto-focus the input field
+    document.getElementById("guess").focus();
+
+    // Add event listener for Enter key
+    document.getElementById("guess").addEventListener("keypress", function(event) {
+        if (event.key === "Enter") {
+            check(); // Call the check function
+        }
+    });
+
 }
 
 //sets box's letter and color
@@ -157,6 +167,10 @@ async function check() {
     });
 
     await new Promise((resolve, reject) => setTimeout(resolve, 10));
+
+    // Clear and refocus the input field after processing the guess
+    document.getElementById("guess").value = "";
+    document.getElementById("guess").focus();
 
     //checks for winning or loosing state and displays results accordingly
     if(matchCount == 6){
