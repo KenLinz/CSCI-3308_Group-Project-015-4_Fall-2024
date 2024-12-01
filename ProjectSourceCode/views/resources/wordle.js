@@ -179,6 +179,7 @@ async function check() {
     //checks for winning or loosing state and displays results accordingly
     if(matchCount == 6){
         document.getElementById("guessbutton").style.visibility = 'hidden';
+        document.getElementById("guess").style.visibility = 'hidden';
         document.getElementById("winlossmsg").textContent="Game won!";
         document.getElementById("wordmsg").textContent="The word was \"" + word +"\""; 
         document.getElementById("numguessmsg").textContent="You found the word in " + guesses.length + " guesses!";
@@ -187,6 +188,7 @@ async function check() {
     }
     else if(guesses.length == 6){
         document.getElementById("guessbutton").style.visibility = 'hidden';
+        document.getElementById("guess").style.visibility = 'hidden';
         document.getElementById("winlossmsg").textContent="Game loss!";
         document.getElementById("wordmsg").textContent="The word was " + word;
         await updateUserStats(false, guesses.length); 
