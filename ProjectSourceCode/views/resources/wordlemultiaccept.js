@@ -35,13 +35,15 @@ async function generateWord() {
     //         break;
     //     }
     // }
+
+    await new Promise((resolve, reject) => setTimeout(resolve, 2));
+
     document.getElementById("game").style.visibility = "visible";
     document.getElementById("loading").style.visibility = "hidden";
 
-
     word = document.getElementById("wordleword").textContent;
 
-    // console.log("WORD IS: " + word);
+    //console.log("WORD IS: " + word);
 }
 
 //sets box's letter and color
@@ -116,26 +118,13 @@ async function check() {
         } else {
             let n = 0;
             let c = 0;
-            dupidx = null;
-            while (n <= w.length) {
-                if (g[i] == w[n]) {
-                    c++;
-                    dupidx = n;
-                }
-                n++;
+            if(w.includes(g[i])){
+                drawGuess(i + 1, g[i], "yellow");
+                w[w.indexOf(g[i])] = "0";
             }
-
-            if(dupidx != null){
-                w.splice(dupidx, 1);
-            }
-
-            if (c == 0) {
-            //make red
-            drawGuess(i + 1, g[i], "red");
-            } else {
-            //make yellow
-            drawGuess(i + 1, g[i], "yellow");
-            }
+            else{
+                drawGuess(i + 1, g[i], "red");
+            } 
         }
         }
         guesses.push(guess);
