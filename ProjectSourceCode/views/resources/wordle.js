@@ -44,7 +44,7 @@ async function generateWord() {
     document.getElementById("game").style.visibility = "visible";
     document.getElementById("loading").style.visibility = "hidden";
 
-    word = many_words[Math.floor(Math.random() * 1000)];
+    // word = many_words[Math.floor(Math.random() * 1000)];
     // console.log("WORD IS: " + word);
 
     // // Auto-focus the input field
