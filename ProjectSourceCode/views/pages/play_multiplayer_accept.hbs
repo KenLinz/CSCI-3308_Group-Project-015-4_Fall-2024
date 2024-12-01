@@ -19,10 +19,7 @@
 <b><div style="margin-left:10px; margin-top:10px; display:inline-block;color:black; border-radius:10px; border:3px solid black; border-style:rounded; background:gray;margin-bottom: 10px;" id={{usersent}}>&nbsp; &nbsp; YOU ARE CHALLENGING {{usersent}} &nbsp; &nbsp;</div></b>
 <div hidden id="usersent">{{usersent}}</div>
 <div hidden id="wordleword">{{wordleword}}</div>
-<div hidden id="usersent_guesses">{{usersent_guesses}}</div>
-{{!-- <div hidden id="usersent">test</div>
-<div hidden id="wordleword">bagels</div>
-<div hidden id="usersent_guesses">3</div> --}}
+
 <body>
     
     <div id="loading">
@@ -38,17 +35,8 @@
 
         <h3 id="wordmsg">word was</h3>
         <h3 id="numguessmsg"></h3>
-        
 
-        <div style="display:inline-block; margin-right: 10px;">
-            <p id="youstats">you found word in __ guesses</p>
-        </div>
-        <div style="display:inline-block; margin-right: 10px;">
-            <p id="theirstats">they found word in __ guesses</p>
-        </div>
-
-
-        <h3 id="winlossmsg">you win/loose</h3>
+        <h3 id="winlossmsg">see the winner of the challenge on your profile page</h3>
 
         <div  style="font-family:impact; margin-left:10px;text-align:center">
 
@@ -61,11 +49,6 @@
                     <input type="hidden" name="userrecieved" id="userrecieved" class="form-control"
                         style="display:block;" value="{{usersent}}">
                 </div>
-
-                <button type="submit"
-                    style="display:inline-block;color:black; border-radius:10px; border:3px solid black; border-style:rounded; background:gray;margin-bottom: 10px;">
-                    Challenge again
-                </button>
             </form>
 
         </div>
