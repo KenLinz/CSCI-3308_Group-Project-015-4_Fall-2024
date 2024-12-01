@@ -22,6 +22,6 @@ README.md - Guidebook/Outline
 
 ## How to run?
 
-We've hosted our site on a cloud, and the link can be found below! To run the code locally, you must first change the index.js host (we've commented it for you as LOCAL HOST) and run "sudo docker compose up."
+We've hosted our site on a cloud, and the link can be found below! To run the code locally, you must first change the index.js host (we've commented it for you as LOCAL HOST) and run "sudo docker compose up".
 
 Link: https://csci-3308-group-project-015-4-fall-2024-w5o1.onrender.com/home
