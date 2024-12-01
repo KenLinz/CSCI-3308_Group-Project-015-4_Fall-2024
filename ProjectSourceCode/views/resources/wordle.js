@@ -18,7 +18,6 @@ async function generateWord() {
         let isValid = await fetch(dictionaryUrl) 
         .then(response => {
             if (!response.ok) {
-                console.log("AHHHHH");
                 throw new Error('choosen word does not exist in dictionary API, reslecting word');
                 return false;
             }
@@ -40,24 +39,23 @@ async function generateWord() {
         }
     }
 
-
     await new Promise((resolve, reject) => setTimeout(resolve, 2));
 
     document.getElementById("game").style.visibility = "visible";
     document.getElementById("loading").style.visibility = "hidden";
 
     word = many_words[Math.floor(Math.random() * 1000)];
-    console.log("WORD IS: " + word);
+    // console.log("WORD IS: " + word);
 
     // // Auto-focus the input field
     document.getElementById("guess").focus();
 
-    // // Add event listener for Enter key
-    // document.getElementById("guess").addEventListener("keypress", function(event) {
-    //     if (event.key === "Enter") {
-    //         check(); // Call the check function
-    //     }
-    // });
+    // Add event listener for Enter key
+    document.getElementById("guess").addEventListener("keypress", function(event) {
+        if (event.key === "Enter") {
+            check(); // Call the check function
+        }
+    });
 
     // Auto-focus the input field
     document.getElementById("guess").focus();
@@ -191,6 +189,7 @@ async function check() {
 
     //checks for winning or loosing state and displays results accordingly
     if(matchCount == 6){
+        document.getElementById("guessbutton").style.visibility = 'hidden';
         document.getElementById("winlossmsg").textContent="Game won!";
         document.getElementById("wordmsg").textContent="The word was \"" + word +"\""; 
         document.getElementById("numguessmsg").textContent="You found the word in " + guesses.length + " guesses!";
@@ -198,6 +197,7 @@ async function check() {
         displayEndgamePopup(true);
     }
     else if(guesses.length == 6){
+        document.getElementById("guessbutton").style.visibility = 'hidden';
         document.getElementById("winlossmsg").textContent="Game loss!";
         document.getElementById("wordmsg").textContent="The word was " + word;
         await updateUserStats(false, guesses.length); 

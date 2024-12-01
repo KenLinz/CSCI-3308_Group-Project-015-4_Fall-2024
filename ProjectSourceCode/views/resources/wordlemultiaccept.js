@@ -42,8 +42,6 @@ async function generateWord() {
     document.getElementById("loading").style.visibility = "hidden";
 
     word = document.getElementById("wordleword").textContent;
-    // word = "bagels";
-
     //console.log("WORD IS: " + word);
 }
 
@@ -141,6 +139,7 @@ async function check() {
 
    //checks for winning or loosing state and displays results accordingly
     if(matchCount == 6 | guesses.length == 6){
+        document.getElementById("guessbutton").style.visibility = 'hidden';
         document.getElementById("wordmsg").textContent="The word was \"" + word +"\""; 
         
         if(guesses.length == 6 & matchCount != 6){

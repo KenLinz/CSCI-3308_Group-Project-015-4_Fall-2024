@@ -45,7 +45,27 @@ async function generateWord() {
 
     word = many_words[Math.floor(Math.random() * 1000)];
 
-    console.log("WORD IS: " + word);
+    // console.log("WORD IS: " + word);
+
+    // // Auto-focus the input field
+    document.getElementById("guess").focus();
+
+    // Add event listener for Enter key
+    document.getElementById("guess").addEventListener("keypress", function(event) {
+        if (event.key === "Enter") {
+            check(); // Call the check function
+        }
+    });
+
+    // Auto-focus the input field
+    document.getElementById("guess").focus();
+
+    // Add event listener for Enter key
+    document.getElementById("guess").addEventListener("keypress", function(event) {
+        if (event.key === "Enter") {
+            check(); // Call the check function
+        }
+    });
 }
 
 //sets box's letter and color
@@ -151,6 +171,7 @@ async function check() {
 
     //checks for winning or loosing state and displays results accordingly
     if(matchCount == 6){
+        document.getElementById("guessbutton").style.visibility = 'hidden';
         if(guesses.length == 1){
             document.getElementById("numguessmsg").textContent="You found the word in " + guesses.length + " guess!";
         }
@@ -163,6 +184,7 @@ async function check() {
         displayEndgamePopup(true);
     }
     else if(guesses.length == 6){
+        document.getElementById("guessbutton").style.visibility = 'hidden';
         document.getElementById("wordmsg").textContent="The word was " + word;
         await updateUserStats(word, guesses.length); 
         displayEndgamePopup(false);
