@@ -144,7 +144,7 @@ async function check() {
         document.getElementById("wordmsg").textContent="The word was \"" + word +"\""; 
         
         if(guesses.length == 6 & matchCount != 6){
-            document.getElementById("youstats").textContent="You didn't find the word!";
+            document.getElementById("numguessmsg").textContent="You didn't find the word!";
         }
         else{
             if(guesses.length == 1){

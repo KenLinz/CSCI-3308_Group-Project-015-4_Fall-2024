@@ -7,39 +7,38 @@ async function generateWord() {
     temp = "";
     //get random 6 letter words until dictionary recognizes it as a real word
     //uncomment when api works again
-    // while(true){
-    //     console.log("AHHHHH");
-    //     let testWord = await fetch('https://random-word-api.herokuapp.com/word?length=6')
-    //     .then(response => response.json())
-    //     .then(function (data) {
-    //         const testWord = data[0];
-    //         return data[0];
-    //     });
-    //     dictionaryUrl = "https://api.dictionaryapi.dev/api/v2/entries/en/" + testWord;
-    //     let isValid = await fetch(dictionaryUrl) 
-    //     .then(response => {
-    //         if (!response.ok) {
-    //             console.log("AHHHHH");
-    //             throw new Error('choosen word does not exist in dictionary API, reslecting word');
-    //             return false;
-    //         }
-    //     })
-    //     .then(data => {
-    //         wordExists = true;
-    //         document.getElementById("message").textContent="";
-    //         return true;
-    //     })
-    //     .catch(error => {
-    //         console.error('Error:', error);
-    //         return false;
-    //     });
+    while(true){
+        let testWord = await fetch('https://random-word-api.herokuapp.com/word?length=6')
+        .then(response => response.json())
+        .then(function (data) {
+            const testWord = data[0];
+            return data[0];
+        });
+        dictionaryUrl = "https://api.dictionaryapi.dev/api/v2/entries/en/" + testWord;
+        let isValid = await fetch(dictionaryUrl) 
+        .then(response => {
+            if (!response.ok) {
+                console.log("AHHHHH");
+                throw new Error('choosen word does not exist in dictionary API, reslecting word');
+                return false;
+            }
+        })
+        .then(data => {
+            wordExists = true;
+            document.getElementById("message").textContent="";
+            return true;
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            return false;
+        });
         
-    //     await new Promise((resolve, reject) => setTimeout(resolve, 100));
-    //     word = testWord;
-    //     if (isValid == true){
-    //         break;
-    //     }
-    // }
+        await new Promise((resolve, reject) => setTimeout(resolve, 100));
+        word = testWord;
+        if (isValid == true){
+            break;
+        }
+    }
 
 
     await new Promise((resolve, reject) => setTimeout(resolve, 2));
@@ -51,7 +50,7 @@ async function generateWord() {
     console.log("WORD IS: " + word);
 
     // // Auto-focus the input field
-    // document.getElementById("guess").focus();
+    document.getElementById("guess").focus();
 
     // // Add event listener for Enter key
     // document.getElementById("guess").addEventListener("keypress", function(event) {
