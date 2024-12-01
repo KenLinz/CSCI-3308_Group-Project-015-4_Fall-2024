@@ -149,6 +149,7 @@ async function check() {
 
    //checks for winning or loosing state and displays results accordingly
     if(matchCount == 6 | guesses.length == 6){
+        document.getElementById("guess").style.visibility = 'hidden';
         document.getElementById("guessbutton").style.visibility = 'hidden';
         document.getElementById("wordmsg").textContent="The word was \"" + word +"\""; 
         
