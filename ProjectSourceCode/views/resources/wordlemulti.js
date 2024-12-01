@@ -159,6 +159,10 @@ async function check() {
 
     await new Promise((resolve, reject) => setTimeout(resolve, 10));
 
+    // Clear and refocus the input field after processing the guess
+    document.getElementById("guess").value = "";
+    document.getElementById("guess").focus();
+
     //checks for winning or loosing state and displays results accordingly
     if(matchCount == 6){
         document.getElementById("guessbutton").style.visibility = 'hidden';
