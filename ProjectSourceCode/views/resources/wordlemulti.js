@@ -1,5 +1,3 @@
-// const { urlencoded } = require("body-parser");
-
 let guesses = [];
 let word = undefined;
 
@@ -25,52 +23,42 @@ async function generateWord() {
         .then(data => {
             wordExists = true;
             document.getElementById("message").textContent="";
-            console.log(wordExists);
             return true;
         })
         .catch(error => {
             console.error('Error:', error);
             return false;
         });
-    
-        // console.log("picked word " + testWord);
-        // console.log("is valid? " + isValid);
-
-        
         await new Promise((resolve, reject) => setTimeout(resolve, 100));
         word = testWord;
         if (isValid == true){
             break;
         }
     }
-
     document.getElementById("game").style.visibility = "visible";
     document.getElementById("loading").style.visibility = "hidden";
-
-    console.log("WORD IS: " + word);
-
+    // console.log("WORD IS: " + word);
 }
 
+//sets box's letter and color
 function drawGuess(index, char, color) {
   row = guesses.length + 1;
   letter = document.getElementById(
     "Letter" + row.toString() + index.toString(),
   );
-  console.log(letter);
   letter.innerHTML = char.toString();
   box = document.getElementById(
     "letterbox" + row.toString() + index.toString(),
   );
-  console.log(box);
   box.style.backgroundColor = color;
 }
 
-
+//sends game stats to database
 async function updateUserStats(word, numGuesses) {
     try {
-        console.log(document.getElementById("userrecieved").textContent);
-        console.log("WORD IS " + word);
-        console.log(numGuesses);
+        // console.log(document.getElementById("userrecieved").textContent);
+        // console.log("WORD IS " + word);
+        // console.log(numGuesses);
         document.getElementById("note").textContent= "Your challenge has been sent to " + document.getElementById("userrecieved").textContent + "!";
         const response = await fetch('/api/newchallenge', {
             method: 'POST',
@@ -91,14 +79,14 @@ async function updateUserStats(word, numGuesses) {
 
         const newmatch = await response.json();
 
-        console.log('Match Created:', newmatch);
+        // console.log('Match Created:', newmatch);
     } catch (error) {
         console.error('Error creating match:', error);
         document.getElementById("note").textContent=  "An error has occurred, failed to create match!";
     }
 }
 
-
+//called when guess button is pressed
 async function check() {
     let guess = document.getElementById("guess").value;
 
@@ -117,17 +105,12 @@ async function check() {
         if (!response.ok) {
             document.getElementById("message").textContent="Please enter a valid word!";
             throw new Error('Network response was not ok');
-            
             return 0;
         }
     })
     .then(data => {
         wordExists = true;
         document.getElementById("message").textContent="";
-        console.log(wordExists);
-
-        console.log(guess);
-        
         const g = guess.split("");
         const w = word.split("");
         let mtchCnt = 0;
@@ -151,9 +134,6 @@ async function check() {
             if(dupidx != null){
                 w.splice(dupidx, 1);
             }
-            
-            console.log(w);
-
             if (c == 0) {
             //make red
             drawGuess(i + 1, g[i], "red");
@@ -164,8 +144,6 @@ async function check() {
         }
         }
         guesses.push(guess);
-        console.log(guesses);
-
         return mtchCnt;})
     .catch(error => {
         console.error('Error:', error);
@@ -173,9 +151,8 @@ async function check() {
     });
 
     await new Promise((resolve, reject) => setTimeout(resolve, 10));
-    console.log(matchCount);
 
-    //add more stuff to win and loss states eventually!
+    //checks for winning or loosing state and displays results accordingly
     if(matchCount == 6){
         if(guesses.length == 1){
             document.getElementById("numguessmsg").textContent="You found the word in " + guesses.length + " guess!";
@@ -191,8 +168,7 @@ async function check() {
     else if(guesses.length == 6){
         document.getElementById("winlossmsg").textContent="Game loss!";
         document.getElementById("wordmsg").textContent="The word was " + word;
-        //note: if you loose its set to 7 to indicate to multiaccept that this player couldnt guess the word
-        await updateUserStats(word, guesses.length + 1); 
+        await updateUserStats(word, guesses.length); 
         displayEndgamePopup(false);
     }
 

@@ -1,7 +1,3 @@
-// const { urlencoded } = require("body-parser");
-
-// const { off } = require("../..");
-
 let guesses = [];
 let word = undefined;
 
@@ -27,52 +23,41 @@ async function generateWord() {
         .then(data => {
             wordExists = true;
             document.getElementById("message").textContent="";
-            console.log(wordExists);
             return true;
         })
         .catch(error => {
             console.error('Error:', error);
             return false;
         });
-    
-        // console.log("picked word " + testWord);
-        // console.log("is valid? " + isValid);
-        
         await new Promise((resolve, reject) => setTimeout(resolve, 100));
         word = testWord;
         if (isValid == true){
             break;
         }
     }
-
     document.getElementById("game").style.visibility = "visible";
     document.getElementById("loading").style.visibility = "hidden";
-
-    word = document.getElementById("wordleword").textContent;
-
-    console.log("WORD IS: " + word);
-
+    // console.log("WORD IS: " + word);
 }
 
+//sets box's letter and color
 function drawGuess(index, char, color) {
   row = guesses.length + 1;
   letter = document.getElementById(
     "Letter" + row.toString() + index.toString(),
   );
-  console.log(letter);
   letter.innerHTML = char.toString();
   box = document.getElementById(
     "letterbox" + row.toString() + index.toString(),
   );
-  console.log(box);
   box.style.backgroundColor = color;
 }
 
-
+//sends game stats to database
 async function updateUserStats(word, numGuesses) {
     try {
-        console.log(document.getElementById("usersent").textContent);
-        console.log(numGuesses);
+        // console.log(document.getElementById("usersent").textContent);
+        // console.log(numGuesses);
         const response = await fetch('/api/endchallenge', {
             method: 'POST',
             headers: {
@@ -82,15 +67,14 @@ async function updateUserStats(word, numGuesses) {
                 userrecieved_guesses: numGuesses
             })
         });
-
-        console.log('Match Updated');
+        // console.log('Match Updated');
     } catch (error) {
         console.error('Error update match:', error);
         document.getElementById("winlossmsg").textContent="an error has occured with update match"; 
     }
 }
 
-
+//called when guess button is pressed
 async function check() {
     let guess = document.getElementById("guess").value;
 
@@ -116,10 +100,6 @@ async function check() {
     .then(data => {
         wordExists = true;
         document.getElementById("message").textContent="";
-        console.log(wordExists);
-
-        console.log(guess);
-        
         const g = guess.split("");
         const w = word.split("");
         let mtchCnt = 0;
@@ -155,7 +135,6 @@ async function check() {
         }
         }
         guesses.push(guess);
-        console.log(guesses);
 
         return mtchCnt;
     })
@@ -165,52 +144,26 @@ async function check() {
     });
 
     await new Promise((resolve, reject) => setTimeout(resolve, 10));
-    console.log(matchCount);
 
-    //add more stuff to win and loss states eventually!
+   //checks for winning or loosing state and displays results accordingly
     if(matchCount == 6 | guesses.length == 6){
-
         document.getElementById("wordmsg").textContent="The word was \"" + word +"\""; 
-
+        
         if(guesses.length == 6 & matchCount != 6){
             document.getElementById("youstats").textContent="You didn't find the word!";
         }
         else{
-            document.getElementById("youstats").textContent="You found the word in " + guesses.length + " guesses!";
+            if(guesses.length == 1){
+                document.getElementById("numguessmsg").textContent="You found the word in " + guesses.length + " guess!";
+            }
+            else{
+                document.getElementById("numguessmsg").textContent="You found the word in " + guesses.length + " guesses!";
+            }
         }
-
-        console.log(document.getElementById("usersent_guesses").textContent);
-        oppGuess = parseInt(document.getElementById("usersent_guesses").textContent);
-
-        if(oppGuess == 7){
-            document.getElementById("theirstats").textContent=document.getElementById("usersent").textContent + " didn't find the word!";
-        }
-        else{
-            document.getElementById("theirstats").textContent= document.getElementById("usersent").textContent + 
-            " found the word in " + document.getElementById("usersent_guesses").textContent + " guesses!";
-        }
-
-        
-        if(oppGuess > guesses.length){
-            document.getElementById("winlossmsg").textContent="You win!";
-        }
-        else if(oppGuess < guesses.length){
-            document.getElementById("winlossmsg").textContent="You lose!";
-        }
-        else{
-            document.getElementById("winlossmsg").textContent="You tied!";
-        }
-    
-        
         await updateUserStats(word, guesses.length);
         displayEndgamePopup(true);
     }
-    // else if(guesses.length == 6){
-    //     document.getElementById("winlossmsg").textContent="Game loss!";
-    //     document.getElementById("wordmsg").textContent="The word was " + word;
-    //     await updateUserStats(word, guesses.length); 
-    //     displayEndgamePopup(false);
-    // }
+
 
     return;
 }
