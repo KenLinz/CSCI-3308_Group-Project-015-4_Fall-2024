@@ -163,7 +163,6 @@ async function check() {
         displayEndgamePopup(true);
     }
     else if(guesses.length == 6){
-        document.getElementById("winlossmsg").textContent="Game loss!";
         document.getElementById("wordmsg").textContent="The word was " + word;
         await updateUserStats(word, guesses.length); 
         displayEndgamePopup(false);

@@ -42,6 +42,7 @@ async function generateWord() {
     document.getElementById("loading").style.visibility = "hidden";
 
     word = document.getElementById("wordleword").textContent;
+    // word = "bagels";
 
     //console.log("WORD IS: " + word);
 }
