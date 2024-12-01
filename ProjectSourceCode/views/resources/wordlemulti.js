@@ -56,16 +56,6 @@ async function generateWord() {
             check(); // Call the check function
         }
     });
-
-    // Auto-focus the input field
-    document.getElementById("guess").focus();
-
-    // Add event listener for Enter key
-    document.getElementById("guess").addEventListener("keypress", function(event) {
-        if (event.key === "Enter") {
-            check(); // Call the check function
-        }
-    });
 }
 
 //sets box's letter and color
