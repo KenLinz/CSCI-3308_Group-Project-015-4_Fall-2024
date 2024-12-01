@@ -1,3 +1,8 @@
+/*
+THIS IS THE CODE FOR THE MULTIPLAYER RECIPIENT-SIDE WORDLE
+----------------------------------------------------------
+*/
+
 let guesses = [];
 let word = undefined;
 
