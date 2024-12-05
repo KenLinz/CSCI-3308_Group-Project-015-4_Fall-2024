@@ -8,23 +8,36 @@ Team Number 4, Recitation Section 015
 
 ### Team Name
 
-I would be down for anything, just be inventive! :\)
+Team Temu Wordle
 
 ### Team Members
 
 Ken Linzmeier, keli1246@colorado.edu, GIT: KenLinz
+Emmet Maias, emmett.macias@colorado.edu, GIT: emmettm12
+Melanie Porter, melanie.porter-1@colorado.edu, GIT: MelanieXinyi
+Olivia Newton, olivia.newton@colorado.edu, GIT: OliviaPG
+Oscar Rodriguez, oscar.rodriguez-1@colorado.edu, GIT: Aaron1776
 
 ### Application Name
 
-Unsure of the project as of creating this, let me know what you guys come up with!
+Temu Wordle
 
 ### Application Description
 
-Unsure of the project as of creating this, let me know what you guys come up with!
+The application will focus around a Wordle-type game with a login portal, the ability to invite
+ friend, and friend and global leaderboards. There will also be a head to head mode where
+ two players will attempt the same word and see who can complete it in the least amount of
+ guesses. From the leaderboard or friends list, players will be able to view other players'
+ profile pages which will include their stats for the general puzzles and stats for the head to
+ head mode, the profile pages will also include an ‘add friend’ functionality. Some of the
+ statistics displayed on the user pages will be the average number of guesses needed to
+ solve a puzzle, longest streak, total solved puzzles, head to head wins and losses, favourite
+ letter
 
 ### Vision Statement
 
-Unsure of the project as of creating this, let me know what you guys come up with!
+To create the worlds best word game that provides an exhilarating competitive experience
+ and an opportunity to belong to an amazing community
 
 ### Version Control
 
@@ -36,15 +49,16 @@ Looking into Agile.
 
 ### Communication Plan
 
-Setting up Microsoft Teams...
+ The team will communicate through MS teams.
 
 ### Meeting Plan
 
-TA: Tuesdays from 10 a.m. to 12 p.m.
+ We will meet on Tuesdays at 10am and will do an in-person check-in with our instructor on
+ Fridays at 11am
 
 ### Case Diagram
 
-Outline Here.
+[testing](readme_pics/UseCaseDiagram.png)
 
 ### Wireframes
 
