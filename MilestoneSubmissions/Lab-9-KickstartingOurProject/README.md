@@ -58,13 +58,11 @@ Looking into Agile.
 
 ### Case Diagram
 
-![testing](readme_pics/UseCaseDiagram.png)
+![use case diagram](readme_pics/UseCaseDiagram.png)
 
 ### Wireframes
 
-Outline Here.
-
-Please refer to the project instructions for more details.
+![wireframe](readme_pics/Wireframe.png)
 
 ## Submission Guidelines
 
